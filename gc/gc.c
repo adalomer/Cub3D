@@ -6,14 +6,14 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 00:39:34 by omadali           #+#    #+#             */
-/*   Updated: 2025/08/07 02:28:59 by omadali          ###   ########.fr       */
+/*   Updated: 2025/08/07 02:38:32 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "headers/gc.h"
-#include "headers/libft.h"
+#include "../headers/gc.h"
+#include "../headers/libft.h"
 
 t_gc	*gc_init(void)
 {

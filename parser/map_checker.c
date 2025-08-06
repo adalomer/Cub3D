@@ -1,28 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.h                                            :+:      :+:    :+:   */
+/*   map_checker.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/07 02:14:59 by omadali           #+#    #+#             */
-/*   Updated: 2025/08/07 02:43:50 by omadali          ###   ########.fr       */
+/*   Created: 2025/08/07 02:46:51 by omadali           #+#    #+#             */
+/*   Updated: 2025/08/07 02:49:07 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CUB3D_H
-#define CUB3D_H
+#include "../headers/mapchecker.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <fcntl.h>
-
-
-typedef struct s_info
+int	is_floor(char c)
 {
-	int		map_fd;
-	char	*map;
-}	t_info;
+	return (c == '0' || c == 'S' || c == 'N' || c == 'E' || c == 'W');
+}
+int	is_valid_file(char *file)
+{
+	int	fd;
 
-#endif
+	fd = open(file, O_RDONLY);
+	if (fd == -1)
+		return (0);
+	close(fd);
+	return (1);
+}
