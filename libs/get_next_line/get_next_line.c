@@ -6,13 +6,13 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 00:39:30 by omadali           #+#    #+#             */
-/*   Updated: 2025/08/07 00:46:57 by omadali          ###   ########.fr       */
+/*   Updated: 2025/08/07 02:34:59 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <unistd.h>
-#include "../headers/get_next_line.h"
+#include "../../headers/get_next_line.h"
 
 char	*ft_get_slice(char *cake)
 {
