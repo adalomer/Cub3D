@@ -1,31 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   libft.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/07 00:44:10 by omadali           #+#    #+#             */
-/*   Updated: 2025/08/07 02:20:31 by omadali          ###   ########.fr       */
+/*   Created: 2025/08/07 02:21:40 by omadali           #+#    #+#             */
+/*   Updated: 2025/08/07 02:25:07 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../headers/libft.h"
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+void	*ft_memcpy(void *dest, const void *src, size_t n)
+{
+	size_t	a;
+	char	*e;
+	char	*d;
 
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 1
-# endif
-
-#include <stdlib.h>
-
-char	*ft_get_slice(char *cake);
-char	*ft_get_leftover(char *cake);
-char	*ft_make_cake(int fd, char *cake);
-char	*get_next_line(int fd);
-char	*ft_strjoin(char *s1, char *s2);
-int		ft_strchr(char *str);
-size_t	ft_strlen(char *s);
-
-#endif
+	if (!dest && !src)
+		return (0);
+	e = (char *)dest;
+	d = (char *)src;
+	a = 0;
+	while (a < n)
+	{
+		e[a] = d[a];
+		a++;
+	}
+	return (dest);
+}

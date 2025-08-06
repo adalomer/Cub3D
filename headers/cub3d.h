@@ -1,31 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/07 00:44:10 by omadali           #+#    #+#             */
-/*   Updated: 2025/08/07 02:20:31 by omadali          ###   ########.fr       */
+/*   Created: 2025/08/07 02:14:59 by omadali           #+#    #+#             */
+/*   Updated: 2025/08/07 02:21:00 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 1
-# endif
+#ifndef CUB3D_H
+#define CUB3D_H
 
 #include <stdlib.h>
-
-char	*ft_get_slice(char *cake);
-char	*ft_get_leftover(char *cake);
-char	*ft_make_cake(int fd, char *cake);
-char	*get_next_line(int fd);
-char	*ft_strjoin(char *s1, char *s2);
-int		ft_strchr(char *str);
-size_t	ft_strlen(char *s);
+#include <stdio.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 #endif
