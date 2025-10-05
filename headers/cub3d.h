@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 02:14:59 by omadali           #+#    #+#             */
-/*   Updated: 2025/08/23 23:33:45 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/05 14:33:45 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,36 @@ typedef struct s_point
 	int	y;
 }	t_point;
 
+// Texture and image structures
+typedef struct s_texture_image
+{
+	void	*ptr;
+	char	*data_addr;
+	int		bits_per_pixel;
+	int		size_line;
+	int		endian;
+	int		width;
+	int		height;
+}	t_texture_image;
+
+typedef struct s_textures
+{
+	t_texture_image	north;
+	t_texture_image	south;
+	t_texture_image	east;
+	t_texture_image	west;
+}	t_textures;
+
+// Ray result structure for texture mapping
+typedef struct s_ray_result
+{
+	double	distance;
+	double	wall_x;
+	int		wall_direction; // 0=north, 1=south, 2=east, 3=west
+	int		hit_side; // 0=vertical, 1=horizontal
+	t_texture_image	*texture;
+}	t_ray_result;
+
 typedef struct s_info
 {
 	// Doku yolları
@@ -40,6 +70,22 @@ typedef struct s_info
 	void	*so_img;
 	void	*we_img;
 	void	*ea_img;
+	
+	// New texture system
+	t_textures	textures;
+	
+	// Old texture pointers (deprecated)
+	void	*texture_north;
+	void	*texture_south;
+	void	*texture_east;
+	void	*texture_west;
+	
+	// Texture path aliases
+	char	*no;
+	char	*so;
+	char	*ea;
+	char	*we;
+	
 	int		tex_width;
 	int		tex_height;
 
@@ -100,14 +146,18 @@ void	rotate_right(t_info *info);
 double	get_player_angle(t_info *info);
 int		is_valid_position(t_info *info, double x, double y);
 
+// Raycasting functions
+void	cast_rays(t_info *info);
+double	cast_single_ray(t_info *info, double angle);
+t_ray_result	cast_single_ray_detailed(t_info *info, double angle);
+int		get_wall_color(t_info *info, double angle);
+void	draw_textured_line(t_info *info, int x, int start, int end, t_ray_result *ray);
+int		get_pixel_from_texture(t_texture_image *texture, int x, int y);
+
 // Drawing functions
 void	draw_frame(t_info *info);
 void	draw_ceiling_and_floor(t_info *info);
 void	draw_vertical_line(t_info *info, int x, int start, int end, int color);
-
-// Raycasting functions
-void	cast_rays(t_info *info);
-double	cast_single_ray(t_info *info, double angle);
-int		get_wall_color(t_info *info, double angle);
+void	put_pixel(t_info *info, int x, int y, int color);
 
 #endif

@@ -18,7 +18,7 @@ SRCS = libs/get_next_line/get_next_line.c \
 OBJS = $(SRCS:.c=.o)
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 MLX_FLAGS = -Lminilibx-linux -lmlx -lXext -lX11 -lm
 
 all: $(NAME)

@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 02:29:58 by omadali           #+#    #+#             */
-/*   Updated: 2025/08/23 23:35:33 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/05 14:33:46 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,20 @@ t_info	*init_info(void)
 	info = malloc(sizeof(t_info));
 	if (!info)
 		return (NULL);
+	// Initialize new texture system
+	info->textures.north = (t_texture_image){0};
+	info->textures.south = (t_texture_image){0};
+	info->textures.east = (t_texture_image){0};
+	info->textures.west = (t_texture_image){0};
+	
+	info->texture_north = NULL;
+	info->texture_south = NULL;
+	info->texture_east = NULL;
+	info->texture_west = NULL;
+	info->no = NULL;
+	info->so = NULL;
+	info->ea = NULL;
+	info->we = NULL;
 	info->no_texture = NULL;
 	info->so_texture = NULL;
 	info->we_texture = NULL;

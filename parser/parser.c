@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 00:39:45 by omadali           #+#    #+#             */
-/*   Updated: 2025/08/23 23:33:50 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/05 14:33:46 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,20 +78,36 @@ static int	process_identifier_line(char *line, t_info *info)
 		return (0);
 	}
 	is_valid = 0;
-	if (ft_strncmp(parts[0], "NO", 3) == 0 && !info->no_texture)
-		is_valid = ((info->no_texture = ft_strdup(parts[1])) != NULL);
-	else if (ft_strncmp(parts[0], "SO", 3) == 0 && !info->so_texture)
-		is_valid = ((info->so_texture = ft_strdup(parts[1])) != NULL);
-	else if (ft_strncmp(parts[0], "WE", 3) == 0 && !info->we_texture)
-		is_valid = ((info->we_texture = ft_strdup(parts[1])) != NULL);
-	else if (ft_strncmp(parts[0], "EA", 3) == 0 && !info->ea_texture)
-		is_valid = ((info->ea_texture = ft_strdup(parts[1])) != NULL);
-	else if (ft_strncmp(parts[0], "F", 2) == 0 && info->floor_color == -1)
+	if (ft_strncmp(parts[0], "NO", 2) == 0 && !info->no_texture)
+	{
+		info->no_texture = ft_strdup(parts[1]);
+		info->no = info->no_texture;  // Set alias
+		is_valid = (info->no_texture != NULL);
+	}
+	else if (ft_strncmp(parts[0], "SO", 2) == 0 && !info->so_texture)
+	{
+		info->so_texture = ft_strdup(parts[1]);
+		info->so = info->so_texture;  // Set alias
+		is_valid = (info->so_texture != NULL);
+	}
+	else if (ft_strncmp(parts[0], "WE", 2) == 0 && !info->we_texture)
+	{
+		info->we_texture = ft_strdup(parts[1]);
+		info->we = info->we_texture;  // Set alias
+		is_valid = (info->we_texture != NULL);
+	}
+	else if (ft_strncmp(parts[0], "EA", 2) == 0 && !info->ea_texture)
+	{
+		info->ea_texture = ft_strdup(parts[1]);
+		info->ea = info->ea_texture;  // Set alias
+		is_valid = (info->ea_texture != NULL);
+	}
+	else if (ft_strncmp(parts[0], "F", 1) == 0 && info->floor_color == -1)
 	{
 		info->floor_color = parse_color(parts[1]);
 		is_valid = (info->floor_color != -1);
 	}
-	else if (ft_strncmp(parts[0], "C", 2) == 0 && info->ceiling_color == -1)
+	else if (ft_strncmp(parts[0], "C", 1) == 0 && info->ceiling_color == -1)
 	{
 		info->ceiling_color = parse_color(parts[1]);
 		is_valid = (info->ceiling_color != -1);

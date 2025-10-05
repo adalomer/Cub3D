@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 15:00:00 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/05 15:00:00 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/05 14:33:48 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 
-static void	put_pixel(t_info *info, int x, int y, int color)
+void	put_pixel(t_info *info, int x, int y, int color)
 {
 	char	*dst;
 
@@ -24,6 +24,107 @@ static void	put_pixel(t_info *info, int x, int y, int color)
 	{
 		dst = info->img_data + (y * info->line_length + x * (info->bits_per_pixel / 8));
 		*(unsigned int*)dst = color;
+	}
+}
+
+int	get_pixel_from_texture(t_texture_image *texture, int x, int y)
+{
+	char	*addr;
+	int		pixel;
+	int		byte_per_pixel;
+
+	// Safety checks
+	if (!texture || !texture->ptr || !texture->data_addr)
+		return (0x808080); // Gray fallback
+	
+	if (x < 0 || x >= texture->width || y < 0 || y >= texture->height)
+		return (0x808080);
+	
+	// Calculate pixel address using hakancub3 method
+	byte_per_pixel = texture->bits_per_pixel / 8;
+	addr = texture->data_addr + texture->size_line * y + byte_per_pixel * x;
+	
+	// Copy pixel data safely
+	pixel = 0;
+	if (byte_per_pixel == 4)
+		pixel = *(int*)addr;
+	else if (byte_per_pixel == 3)
+	{
+		pixel = (addr[2] << 16) | (addr[1] << 8) | addr[0];
+	}
+	else if (byte_per_pixel == 2)
+	{
+		pixel = *(short*)addr;
+	}
+	else
+		pixel = *addr;
+	
+	return (pixel);
+}
+
+void	draw_textured_line(t_info *info, int x, int start, int end, t_ray_result *ray)
+{
+	int		y;
+	int		color;
+	int		wall_height;
+	int		tex_x, tex_y;
+	double	step_y;
+	double	tex_pos;
+	
+	wall_height = end - start;
+	if (wall_height <= 0)
+		return;
+	
+	// Calculate texture X coordinate (hakancub3 style)
+	if (ray->texture && ray->texture->ptr)
+	{
+		tex_x = (int)(ray->wall_x * ray->texture->width);
+		if (tex_x < 0) tex_x = 0;
+		if (tex_x >= ray->texture->width) tex_x = ray->texture->width - 1;
+		
+		// Calculate Y step
+		step_y = (double)ray->texture->height / wall_height;
+		
+		// Starting position (handle off-screen parts)
+		tex_pos = (start - (SCREEN_HEIGHT / 2 - wall_height / 2)) * step_y;
+		if (tex_pos < 0) tex_pos = 0;
+	}
+	else
+	{
+		tex_x = 0;
+		step_y = 1.0;
+		tex_pos = 0;
+	}
+	
+	y = start;
+	while (y <= end && y < SCREEN_HEIGHT)
+	{
+		if (y >= 0)
+		{
+			if (ray->texture && ray->texture->ptr)
+			{
+				tex_y = (int)tex_pos;
+				if (tex_y >= ray->texture->height) tex_y = ray->texture->height - 1;
+				if (tex_y < 0) tex_y = 0;
+				
+				color = get_pixel_from_texture(ray->texture, tex_x, tex_y);
+			}
+			else
+			{
+				// Direction-based fallback colors (should not be used now)
+				if (ray->wall_direction == 0)
+					color = 0x96CEB4; // North - green
+				else if (ray->wall_direction == 1)
+					color = 0x45B7D1; // South - blue
+				else if (ray->wall_direction == 2)
+					color = 0xFF6B6B; // East - red
+				else
+					color = 0x4ECDC4; // West - cyan
+			}
+			put_pixel(info, x, y, color);
+		}
+		tex_pos += step_y;
+		y++;
 	}
 }
 
