@@ -16,9 +16,10 @@
 # include <fcntl.h>
 # include <unistd.h>
 # include <stdlib.h>
-# include "../headers/cub3d.h"
 
+typedef struct s_info	t_info;
+
+int		validate_map(t_info *info);
 int		is_floor(char c);
-int		is_valid_file(char *file);
 
 #endif

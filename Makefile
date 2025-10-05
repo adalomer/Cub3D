@@ -1,19 +1,19 @@
 NAME = Cub3d
 
-SRCS = get_next_line/get_next_line.c \
-	   get_next_line/get_next_line_utils.c \
-	   libft/libft.c \
+SRCS = libs/get_next_line/get_next_line.c \
+	   libs/get_next_line/get_next_line_utils.c \
+	   libs/libft/libft.c \
 	   parser/parser.c \
 	   parser/parser_utils.c \
 	   parser/map_checker.c \
 	   main.c \
-	   cub3d.c \
+	   core/cub3d.c \
 	   init.c \
-	   draw.c \
+	   core/draw.c \
 	   raycasting.c \
-	   events.c \
-	   utils.c \
-	   gc.c
+	   core/events.c \
+	   core/utils.c \
+	   gc/gc.c
 
 OBJS = $(SRCS:.c=.o)
 
@@ -24,18 +24,18 @@ MLX_FLAGS = -Lminilibx-linux -lmlx -lXext -lX11 -lm
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	make -C minilibx_linux 
-	$(CC) $(CFLAGS) $(OBJS) $(MLX_FLAGS) -o $(NAME)
+	make -C libs/minilibx-linux 
+	$(CC) $(CFLAGS) $(OBJS) -Llibs/minilibx-linux -lmlx -lXext -lX11 -lm -o $(NAME)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -Iincludes -c $< -o $@
+	$(CC) $(CFLAGS) -Iheaders -Ilibs/minilibx-linux -c $< -o $@
 
 clean:
-	make -C minilibx_linux clean
+	make -C libs/minilibx-linux clean
 	rm -f $(OBJS)
 
 fclean: clean
-	make -C minilibx_linux clean
+	make -C libs/minilibx-linux clean
 	rm -f $(NAME)
 
 re: fclean all

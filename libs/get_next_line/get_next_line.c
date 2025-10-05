@@ -56,7 +56,7 @@ char	*ft_get_leftover(char *cake)
 		free(cake);
 		return (NULL);
 	}
-	new_cake = (char *)malloc(sizeof(char) * (ft_strlen(cake) - i + 1));
+	new_cake = (char *)malloc(sizeof(char) * (ft_strlen_gnl(cake) - i + 1));
 	if (!new_cake)
 		return (NULL);
 	i++;
@@ -76,7 +76,7 @@ char	*ft_make_cake(int fd, char *cake)
 	if (!new_slice)
 		return (NULL);
 	slice_len = 1;
-	while (!ft_strchr(cake) && slice_len != 0)
+	while (!ft_strchr_gnl(cake) && slice_len != 0)
 	{
 		slice_len = read(fd, new_slice, BUFFER_SIZE);
 		if (slice_len == -1)

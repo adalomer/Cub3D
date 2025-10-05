@@ -36,6 +36,7 @@ t_gc	*get_set_gc(t_gc *new_gc)
 
 void	gc_destroy(t_gc *gc, int flag)
 {
+	(void)flag;
 	if (!gc)
 		return ;
 	gc_free_all(gc);

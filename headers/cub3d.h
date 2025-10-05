@@ -35,6 +35,14 @@ typedef struct s_info
 	char	*we_texture;
 	char	*ea_texture;
 
+	// Texture images
+	void	*no_img;
+	void	*so_img;
+	void	*we_img;
+	void	*ea_img;
+	int		tex_width;
+	int		tex_height;
+
 	// Zemin ve tavan renkleri
 	int		floor_color;
 	int		ceiling_color;
@@ -50,10 +58,16 @@ typedef struct s_info
 	double	player_x;
 	double	player_y;
 	char	player_dir;
+	double	player_angle;
 
 	// MLX ile ilgili pointerlar
 	void	*mlx;
 	void	*win;
+	void	*img;
+	char	*img_data;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
 
 }	t_info;
 
@@ -70,5 +84,30 @@ void	safe_exit(int code);
 int		is_empty_line(const char *line);
 void	free_split(char **split_array);
 int		parse_color(const char *color_str);
+
+// Game functions
+int		close_window(t_info *info);
+int		key_press(int keycode, t_info *info);
+int		game_loop(t_info *info);
+
+// Movement functions
+void	move_forward(t_info *info);
+void	move_backward(t_info *info);
+void	move_left(t_info *info);
+void	move_right(t_info *info);
+void	rotate_left(t_info *info);
+void	rotate_right(t_info *info);
+double	get_player_angle(t_info *info);
+int		is_valid_position(t_info *info, double x, double y);
+
+// Drawing functions
+void	draw_frame(t_info *info);
+void	draw_ceiling_and_floor(t_info *info);
+void	draw_vertical_line(t_info *info, int x, int start, int end, int color);
+
+// Raycasting functions
+void	cast_rays(t_info *info);
+double	cast_single_ray(t_info *info, double angle);
+int		get_wall_color(t_info *info, double angle);
 
 #endif

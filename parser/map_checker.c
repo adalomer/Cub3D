@@ -10,8 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "headers/cub3d.h"
-#include "headers/libft.h"
+#include "../headers/cub3d.h"
+#include "../headers/libft.h"
+#include <math.h>
 
 static int	check_characters_and_player(t_info *info)
 {
@@ -25,14 +26,21 @@ static int	check_characters_and_player(t_info *info)
 	{
 		x = 0;
 		while (info->map[y][x])
+		{		if (ft_strchr("NSEW", info->map[y][x]))
 		{
-			if (ft_strchr("NSEW", info->map[y][x]))
-			{
-				info->player_dir = info->map[y][x];
-				info->player_pos_x = (double)x + 0.5;
-				info->player_pos_y = (double)y + 0.5;
-				player_count++;
-			}
+			info->player_dir = info->map[y][x];
+			info->player_x = (double)x + 0.5;
+			info->player_y = (double)y + 0.5;
+			if (info->map[y][x] == 'N')
+				info->player_angle = -M_PI / 2;
+			else if (info->map[y][x] == 'S')
+				info->player_angle = M_PI / 2;
+			else if (info->map[y][x] == 'W')
+				info->player_angle = M_PI;
+			else if (info->map[y][x] == 'E')
+				info->player_angle = 0;
+			player_count++;
+		}
 			else if (!ft_strchr("01 ", info->map[y][x]))
 				return (ft_putstr_fd("Error: Invalid map character\n", 2), 0);
 			x++;

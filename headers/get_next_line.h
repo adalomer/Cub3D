@@ -25,7 +25,7 @@ char	*ft_get_leftover(char *cake);
 char	*ft_make_cake(int fd, char *cake);
 char	*get_next_line(int fd);
 char	*ft_strjoin(char *s1, char *s2);
-int		ft_strchr(char *str);
-size_t	ft_strlen(char *s);
+int		ft_strchr_gnl(char *str);
+size_t	ft_strlen_gnl(char *s);
 
 #endif

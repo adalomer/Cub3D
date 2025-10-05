@@ -23,6 +23,12 @@ t_info	*init_info(void)
 	info->so_texture = NULL;
 	info->we_texture = NULL;
 	info->ea_texture = NULL;
+	info->no_img = NULL;
+	info->so_img = NULL;
+	info->we_img = NULL;
+	info->ea_img = NULL;
+	info->tex_width = 64;
+	info->tex_height = 64;
 	info->floor_color = -1;
 	info->ceiling_color = -1;
 	info->identifiers_found = 0;
@@ -32,8 +38,14 @@ t_info	*init_info(void)
 	info->player_x = 0;
 	info->player_y = 0;
 	info->player_dir = '\0';
+	info->player_angle = 0;
 	info->mlx = NULL;
 	info->win = NULL;
+	info->img = NULL;
+	info->img_data = NULL;
+	info->bits_per_pixel = 0;
+	info->line_length = 0;
+	info->endian = 0;
 	return (info);
 }
 

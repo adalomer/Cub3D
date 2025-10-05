@@ -10,10 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "headers/cub3d.h"
-#include "headers/get_next_line.h"
-#include "headers/libft.h"
-#include "headers/mapchecker.h"
+#include "../headers/cub3d.h"
+#include "../headers/get_next_line.h"
+#include "../headers/libft.h"
+#include "../headers/mapchecker.h"
 
 static int	parse_identifiers(int fd, t_info *info);
 static int	parse_map(int fd, t_info *info);
@@ -127,7 +127,8 @@ static int	parse_map(int fd, t_info *info)
 	}
 	if (!map_lines)
 		return (ft_putstr_fd("Error: No map found\n", 2), 0);
-	info->map = convert_list_to_map(map_lines, ft_lstsize(map_lines));
+	info->map_height = ft_lstsize(map_lines);
+	info->map = convert_list_to_map(map_lines, info->map_height);
 	ft_lstclear(&map_lines, free);
 	if (!info->map || !validate_map(info))
 		return (0);
@@ -145,9 +146,16 @@ static char	**convert_list_to_map(t_list *map_lines, int size)
 		return (NULL);
 	current = map_lines;
 	i = 0;
-	while (current)
+	while (current && i < size)
 	{
-		map[i] = (char *)current->content;
+		map[i] = ft_strdup((char *)current->content);
+		if (!map[i])
+		{
+			while (i > 0)
+				free(map[--i]);
+			free(map);
+			return (NULL);
+		}
 		current = current->next;
 		i++;
 	}
