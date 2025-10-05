@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/05 15:00:00 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/05 14:33:48 by omadali          ###   ########.fr       */
+/*   Created: 2025/10/05 14:51:53 by omadali           #+#    #+#             */
+/*   Updated: 2025/10/05 14:51:54 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #define MOVE_SPEED 0.3
 #define ROT_SPEED 0.15
 
+/* Moves player forward based on current direction */
 void	move_forward(t_info *info)
 {
 	double	new_x;
@@ -34,6 +35,7 @@ void	move_forward(t_info *info)
 	}
 }
 
+/* Moves player backward (opposite to current direction) */
 void	move_backward(t_info *info)
 {
 	double	new_x;
@@ -52,6 +54,7 @@ void	move_backward(t_info *info)
 	}
 }
 
+/* Moves player left (perpendicular to current direction) */
 void	move_left(t_info *info)
 {
 	double	new_x;
@@ -70,6 +73,7 @@ void	move_left(t_info *info)
 	}
 }
 
+/* Moves player right (perpendicular to current direction) */
 void	move_right(t_info *info)
 {
 	double	new_x;
@@ -88,21 +92,25 @@ void	move_right(t_info *info)
 	}
 }
 
+/* Rotates player view to the left */
 void	rotate_left(t_info *info)
 {
 	info->player_angle -= ROT_SPEED;
 }
 
+/* Rotates player view to the right */
 void	rotate_right(t_info *info)
 {
 	info->player_angle += ROT_SPEED;
 }
 
+/* Returns current player angle */
 double	get_player_angle(t_info *info)
 {
 	return (info->player_angle);
 }
 
+/* Checks if position is valid (not a wall or out of bounds) */
 int	is_valid_position(t_info *info, double x, double y)
 {
 	int	map_x;

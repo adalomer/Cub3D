@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/05 15:00:00 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/05 14:33:47 by omadali          ###   ########.fr       */
+/*   Created: 2025/10/05 14:51:56 by omadali           #+#    #+#             */
+/*   Updated: 2025/10/05 14:51:57 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 
+/* Validates that filename has .cub extension */
 int	is_valid_file(const char *filename)
 {
 	const char	*ext;
@@ -27,6 +28,7 @@ int	is_valid_file(const char *filename)
 	return (1);
 }
 
+/* Opens and validates file descriptor for given filename */
 int	open_fd(const char *filename)
 {
 	int	fd;
@@ -37,23 +39,25 @@ int	open_fd(const char *filename)
 	return (fd);
 }
 
+/* Safely closes file descriptor */
 void	close_fd(int fd)
 {
 	if (fd >= 0)
 		close(fd);
 }
 
+/* Exits program with given code */
 void	safe_exit(int code)
 {
 	exit(code);
 }
 
+/* Loads XPM texture file and returns texture image structure */
 static t_texture_image	load_texture_image(t_info *info, char *path)
 {
 	t_texture_image	img;
 	char			abs_path[1024];
 
-	// Initialize to safe values
 	img.ptr = NULL;
 	img.data_addr = NULL;
 	img.width = 64;
@@ -67,10 +71,8 @@ static t_texture_image	load_texture_image(t_info *info, char *path)
 
 	printf("Attempting to load: %s\n", path);
 
-	// Try relative path first
 	img.ptr = mlx_xpm_file_to_image(info->mlx, path, &img.width, &img.height);
 	
-	// If failed, try absolute path
 	if (!img.ptr)
 	{
 		snprintf(abs_path, sizeof(abs_path), "/home/omadali/Masaüstü/cub3d/%s", path);
@@ -84,7 +86,6 @@ static t_texture_image	load_texture_image(t_info *info, char *path)
 		return (img);
 	}
 
-	// Get image data address
 	img.data_addr = mlx_get_data_addr(img.ptr, &img.bits_per_pixel, 
 		&img.size_line, &img.endian);
 	if (!img.data_addr)
@@ -99,13 +100,13 @@ static t_texture_image	load_texture_image(t_info *info, char *path)
 	return (img);
 }
 
+/* Creates a simple solid color texture as fallback */
 static t_texture_image	create_simple_texture(t_info *info, int color)
 {
 	t_texture_image	img;
 	int				*pixel_data;
 	int				i;
 
-	// Create a simple 64x64 colored texture
 	img.ptr = mlx_new_image(info->mlx, 64, 64);
 	if (!img.ptr)
 	{
@@ -126,7 +127,6 @@ static t_texture_image	create_simple_texture(t_info *info, int color)
 		return (img);
 	}
 
-	// Fill with solid color
 	pixel_data = (int*)img.data_addr;
 	i = 0;
 	while (i < 64 * 64)
@@ -139,16 +139,16 @@ static t_texture_image	create_simple_texture(t_info *info, int color)
 	return (img);
 }
 
+/* Loads all directional textures with XPM fallback to manual creation */
 static int	load_textures(t_info *info)
 {
 	printf("Trying to load XPM textures with manual fallback...\n");
 	
-	// Try to load XPM, fallback to manual creation
 	if (info->no)
 	{
 		info->textures.north = load_texture_image(info, info->no);
 		if (!info->textures.north.ptr)
-			info->textures.north = create_simple_texture(info, 0x96CEB4); // Green
+			info->textures.north = create_simple_texture(info, 0x96CEB4);
 	}
 	else
 		info->textures.north = create_simple_texture(info, 0x96CEB4);
@@ -157,7 +157,7 @@ static int	load_textures(t_info *info)
 	{
 		info->textures.south = load_texture_image(info, info->so);
 		if (!info->textures.south.ptr)
-			info->textures.south = create_simple_texture(info, 0x45B7D1); // Blue
+			info->textures.south = create_simple_texture(info, 0x45B7D1);
 	}
 	else
 		info->textures.south = create_simple_texture(info, 0x45B7D1);
@@ -166,7 +166,7 @@ static int	load_textures(t_info *info)
 	{
 		info->textures.east = load_texture_image(info, info->ea);
 		if (!info->textures.east.ptr)
-			info->textures.east = create_simple_texture(info, 0xFF6B6B); // Red
+			info->textures.east = create_simple_texture(info, 0xFF6B6B);
 	}
 	else
 		info->textures.east = create_simple_texture(info, 0xFF6B6B);
@@ -175,7 +175,7 @@ static int	load_textures(t_info *info)
 	{
 		info->textures.west = load_texture_image(info, info->we);
 		if (!info->textures.west.ptr)
-			info->textures.west = create_simple_texture(info, 0x4ECDC4); // Cyan
+			info->textures.west = create_simple_texture(info, 0x4ECDC4);
 	}
 	else
 		info->textures.west = create_simple_texture(info, 0x4ECDC4);

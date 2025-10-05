@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/05 15:00:00 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/05 14:33:48 by omadali          ###   ########.fr       */
+/*   Created: 2025/10/05 14:51:11 by omadali           #+#    #+#             */
+/*   Updated: 2025/10/05 14:51:12 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 
+/* Sets a pixel at coordinates (x,y) with given color in the image buffer */
 void	put_pixel(t_info *info, int x, int y, int color)
 {
 	char	*dst;
@@ -27,24 +28,22 @@ void	put_pixel(t_info *info, int x, int y, int color)
 	}
 }
 
+/* Extracts pixel color from texture at given coordinates */
 int	get_pixel_from_texture(t_texture_image *texture, int x, int y)
 {
 	char	*addr;
 	int		pixel;
 	int		byte_per_pixel;
 
-	// Safety checks
 	if (!texture || !texture->ptr || !texture->data_addr)
-		return (0x808080); // Gray fallback
+		return (0x808080);
 	
 	if (x < 0 || x >= texture->width || y < 0 || y >= texture->height)
 		return (0x808080);
 	
-	// Calculate pixel address using hakancub3 method
 	byte_per_pixel = texture->bits_per_pixel / 8;
 	addr = texture->data_addr + texture->size_line * y + byte_per_pixel * x;
 	
-	// Copy pixel data safely
 	pixel = 0;
 	if (byte_per_pixel == 4)
 		pixel = *(int*)addr;
@@ -62,6 +61,7 @@ int	get_pixel_from_texture(t_texture_image *texture, int x, int y)
 	return (pixel);
 }
 
+/* Draws a vertical textured line from start to end at column x */
 void	draw_textured_line(t_info *info, int x, int start, int end, t_ray_result *ray)
 {
 	int		y;
@@ -75,17 +75,14 @@ void	draw_textured_line(t_info *info, int x, int start, int end, t_ray_result *r
 	if (wall_height <= 0)
 		return;
 	
-	// Calculate texture X coordinate (hakancub3 style)
 	if (ray->texture && ray->texture->ptr)
 	{
 		tex_x = (int)(ray->wall_x * ray->texture->width);
 		if (tex_x < 0) tex_x = 0;
 		if (tex_x >= ray->texture->width) tex_x = ray->texture->width - 1;
 		
-		// Calculate Y step
 		step_y = (double)ray->texture->height / wall_height;
 		
-		// Starting position (handle off-screen parts)
 		tex_pos = (start - (SCREEN_HEIGHT / 2 - wall_height / 2)) * step_y;
 		if (tex_pos < 0) tex_pos = 0;
 	}
@@ -111,15 +108,14 @@ void	draw_textured_line(t_info *info, int x, int start, int end, t_ray_result *r
 			}
 			else
 			{
-				// Direction-based fallback colors (should not be used now)
 				if (ray->wall_direction == 0)
-					color = 0x96CEB4; // North - green
+					color = 0x96CEB4;
 				else if (ray->wall_direction == 1)
-					color = 0x45B7D1; // South - blue
+					color = 0x45B7D1;
 				else if (ray->wall_direction == 2)
-					color = 0xFF6B6B; // East - red
+					color = 0xFF6B6B;
 				else
-					color = 0x4ECDC4; // West - cyan
+					color = 0x4ECDC4;
 			}
 			put_pixel(info, x, y, color);
 		}
@@ -128,6 +124,7 @@ void	draw_textured_line(t_info *info, int x, int start, int end, t_ray_result *r
 	}
 }
 
+/* Creates image buffer, renders frame, and displays it */
 void	draw_frame(t_info *info)
 {
 	if (!info->img)
@@ -141,6 +138,7 @@ void	draw_frame(t_info *info)
 	mlx_put_image_to_window(info->mlx, info->win, info->img, 0, 0);
 }
 
+/* Fills the upper half with ceiling color and lower half with floor color */
 void	draw_ceiling_and_floor(t_info *info)
 {
 	int	x;
@@ -169,6 +167,7 @@ void	draw_ceiling_and_floor(t_info *info)
 	}
 }
 
+/* Draws a solid color vertical line from start to end at column x */
 void	draw_vertical_line(t_info *info, int x, int start, int end, int color)
 {
 	int	y;

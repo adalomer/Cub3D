@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/05 15:00:00 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/05 14:33:47 by omadali          ###   ########.fr       */
+/*   Created: 2025/10/05 14:51:50 by omadali           #+#    #+#             */
+/*   Updated: 2025/10/05 14:51:51 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 #define LEFT_ARROW 65361
 #define RIGHT_ARROW 65363
 
+/* Handles window close event */
 int	close_window(t_info *info)
 {
 	mlx_destroy_window(info->mlx, info->win);
@@ -28,6 +29,7 @@ int	close_window(t_info *info)
 	return (0);
 }
 
+/* Handles keyboard input for movement and rotation */
 int	key_press(int keycode, t_info *info)
 {
 	if (keycode == ESC_KEY)
@@ -47,6 +49,7 @@ int	key_press(int keycode, t_info *info)
 	return (0);
 }
 
+/* Main game loop for continuous rendering */
 int	game_loop(t_info *info)
 {
 	draw_frame(info);
