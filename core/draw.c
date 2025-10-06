@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 14:51:11 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/05 14:51:12 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/06 19:02:34 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #define SCREEN_HEIGHT 600
 
 /* Sets a pixel at coordinates (x,y) with given color in the image buffer */
+/* NOTE: This function is kept for compatibility but not used in main rendering */
 void	put_pixel(t_info *info, int x, int y, int color)
 {
 	char	*dst;
@@ -70,6 +71,7 @@ void	draw_textured_line(t_info *info, int x, int start, int end, t_ray_result *r
 	int		tex_x, tex_y;
 	double	step_y;
 	double	tex_pos;
+	char	*dst;
 	
 	wall_height = end - start;
 	if (wall_height <= 0)
@@ -77,14 +79,16 @@ void	draw_textured_line(t_info *info, int x, int start, int end, t_ray_result *r
 	
 	if (ray->texture && ray->texture->ptr)
 	{
+		// Calculate texture X coordinate (which column of the texture to use)
 		tex_x = (int)(ray->wall_x * ray->texture->width);
 		if (tex_x < 0) tex_x = 0;
 		if (tex_x >= ray->texture->width) tex_x = ray->texture->width - 1;
 		
+		// Calculate step: how much texture Y changes per screen pixel
 		step_y = (double)ray->texture->height / wall_height;
 		
-		tex_pos = (start - (SCREEN_HEIGHT / 2 - wall_height / 2)) * step_y;
-		if (tex_pos < 0) tex_pos = 0;
+		// Start at the top of the wall texture
+		tex_pos = 0;
 	}
 	else
 	{
@@ -117,7 +121,9 @@ void	draw_textured_line(t_info *info, int x, int start, int end, t_ray_result *r
 				else
 					color = 0x4ECDC4;
 			}
-			put_pixel(info, x, y, color);
+			// Direct image buffer write instead of put_pixel function call
+			dst = info->img_data + (y * info->line_length + x * (info->bits_per_pixel / 8));
+			*(unsigned int*)dst = color;
 		}
 		tex_pos += step_y;
 		y++;
@@ -141,26 +147,35 @@ void	draw_frame(t_info *info)
 /* Fills the upper half with ceiling color and lower half with floor color */
 void	draw_ceiling_and_floor(t_info *info)
 {
-	int	x;
-	int	y;
+	int		x;
+	int		y;
+	char	*dst;
+	int		bytes_per_pixel;
 
+	bytes_per_pixel = info->bits_per_pixel / 8;
+	
+	// Draw ceiling
 	y = 0;
 	while (y < SCREEN_HEIGHT / 2)
 	{
 		x = 0;
 		while (x < SCREEN_WIDTH)
 		{
-			put_pixel(info, x, y, info->ceiling_color);
+			dst = info->img_data + (y * info->line_length + x * bytes_per_pixel);
+			*(unsigned int*)dst = info->ceiling_color;
 			x++;
 		}
 		y++;
 	}
+	
+	// Draw floor
 	while (y < SCREEN_HEIGHT)
 	{
 		x = 0;
 		while (x < SCREEN_WIDTH)
 		{
-			put_pixel(info, x, y, info->floor_color);
+			dst = info->img_data + (y * info->line_length + x * bytes_per_pixel);
+			*(unsigned int*)dst = info->floor_color;
 			x++;
 		}
 		y++;
@@ -170,13 +185,19 @@ void	draw_ceiling_and_floor(t_info *info)
 /* Draws a solid color vertical line from start to end at column x */
 void	draw_vertical_line(t_info *info, int x, int start, int end, int color)
 {
-	int	y;
+	int		y;
+	char	*dst;
+	int		bytes_per_pixel;
 
+	bytes_per_pixel = info->bits_per_pixel / 8;
 	y = start;
 	while (y <= end && y < SCREEN_HEIGHT)
 	{
 		if (y >= 0)
-			put_pixel(info, x, y, color);
+		{
+			dst = info->img_data + (y * info->line_length + x * bytes_per_pixel);
+			*(unsigned int*)dst = color;
+		}
 		y++;
 	}
 }

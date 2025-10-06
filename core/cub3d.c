@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 14:51:56 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/05 14:51:57 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/06 19:02:33 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,13 @@ static t_texture_image	load_texture_image(t_info *info, char *path)
 	
 	if (!img.ptr)
 	{
-		snprintf(abs_path, sizeof(abs_path), "/home/omadali/Masaüstü/cub3d/%s", path);
+		snprintf(abs_path, sizeof(abs_path), "%s", path);
+		if (abs_path[0] == '.')
+		{
+			char cwd[1024];
+			getcwd(cwd, sizeof(cwd));
+			snprintf(abs_path, sizeof(abs_path), "%s/%s", cwd, path + 2);
+		}
 		printf("Trying absolute: %s\n", abs_path);
 		img.ptr = mlx_xpm_file_to_image(info->mlx, abs_path, &img.width, &img.height);
 	}
@@ -83,6 +89,7 @@ static t_texture_image	load_texture_image(t_info *info, char *path)
 	if (!img.ptr)
 	{
 		printf("Warning: Failed to load texture: %s\n", path);
+		printf("MLX Error - file may not exist or invalid XPM format\n");
 		return (img);
 	}
 

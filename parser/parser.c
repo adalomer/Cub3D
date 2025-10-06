@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 00:39:45 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/05 14:33:46 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/06 19:02:33 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "../headers/get_next_line.h"
 #include "../headers/libft.h"
 #include "../headers/mapchecker.h"
+#include <stdio.h>
 
 static int	parse_identifiers(int fd, t_info *info);
 static int	parse_map(int fd, t_info *info);
@@ -80,26 +81,30 @@ static int	process_identifier_line(char *line, t_info *info)
 	is_valid = 0;
 	if (ft_strncmp(parts[0], "NO", 2) == 0 && !info->no_texture)
 	{
-		info->no_texture = ft_strdup(parts[1]);
-		info->no = info->no_texture;  // Set alias
+		info->no_texture = ft_strtrim(parts[1], " \t\n\r");
+		info->no = info->no_texture;
+		printf("DEBUG: NO texture path = '%s'\n", info->no);
 		is_valid = (info->no_texture != NULL);
 	}
 	else if (ft_strncmp(parts[0], "SO", 2) == 0 && !info->so_texture)
 	{
-		info->so_texture = ft_strdup(parts[1]);
-		info->so = info->so_texture;  // Set alias
+		info->so_texture = ft_strtrim(parts[1], " \t\n\r");
+		info->so = info->so_texture;
+		printf("DEBUG: SO texture path = '%s'\n", info->so);
 		is_valid = (info->so_texture != NULL);
 	}
 	else if (ft_strncmp(parts[0], "WE", 2) == 0 && !info->we_texture)
 	{
-		info->we_texture = ft_strdup(parts[1]);
-		info->we = info->we_texture;  // Set alias
+		info->we_texture = ft_strtrim(parts[1], " \t\n\r");
+		info->we = info->we_texture;
+		printf("DEBUG: WE texture path = '%s'\n", info->we);
 		is_valid = (info->we_texture != NULL);
 	}
 	else if (ft_strncmp(parts[0], "EA", 2) == 0 && !info->ea_texture)
 	{
-		info->ea_texture = ft_strdup(parts[1]);
-		info->ea = info->ea_texture;  // Set alias
+		info->ea_texture = ft_strtrim(parts[1], " \t\n\r");
+		info->ea = info->ea_texture;
+		printf("DEBUG: EA texture path = '%s'\n", info->ea);
 		is_valid = (info->ea_texture != NULL);
 	}
 	else if (ft_strncmp(parts[0], "F", 1) == 0 && info->floor_color == -1)

@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 02:30:06 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/05 14:33:39 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/06 19:02:34 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,70 +88,117 @@ double	cast_single_ray(t_info *info, double angle)
 t_ray_result	cast_single_ray_detailed(t_info *info, double angle)
 {
 	t_ray_result result;
-	double	x, y, dx, dy, step_size;
-	double	prev_x, prev_y;
-
-	x = info->player_x;
-	y = info->player_y;
-	step_size = 0.005; // Smaller step for smoother walls
-	dx = cos(angle) * step_size;
-	dy = sin(angle) * step_size;
-	result.distance = 0;
-	result.texture = NULL;
+	double ray_dir_x, ray_dir_y;
+	int map_x, map_y;
+	double side_dist_x, side_dist_y;
+	double delta_dist_x, delta_dist_y;
+	int step_x, step_y;
+	int hit;
+	int side;
 	
-	while (result.distance < 30)
+	// Initialize ray direction
+	ray_dir_x = cos(angle);
+	ray_dir_y = sin(angle);
+	
+	// Current map position
+	map_x = (int)info->player_x;
+	map_y = (int)info->player_y;
+	
+	// Length of ray from one x or y-side to next x or y-side
+	delta_dist_x = (ray_dir_x == 0) ? 1e30 : fabs(1 / ray_dir_x);
+	delta_dist_y = (ray_dir_y == 0) ? 1e30 : fabs(1 / ray_dir_y);
+	
+	// Calculate step and initial side_dist
+	if (ray_dir_x < 0)
 	{
-		prev_x = x;
-		prev_y = y;
-		x += dx;
-		y += dy;
-		result.distance += step_size;
-		
-		if (x < 0 || y < 0 || (int)y >= info->map_height || 
-			(int)x >= (int)ft_strlen(info->map[(int)y]))
-			break;
-			
-		if (info->map[(int)y][(int)x] == '1')
+		step_x = -1;
+		side_dist_x = (info->player_x - map_x) * delta_dist_x;
+	}
+	else
+	{
+		step_x = 1;
+		side_dist_x = (map_x + 1.0 - info->player_x) * delta_dist_x;
+	}
+	
+	if (ray_dir_y < 0)
+	{
+		step_y = -1;
+		side_dist_y = (info->player_y - map_y) * delta_dist_y;
+	}
+	else
+	{
+		step_y = 1;
+		side_dist_y = (map_y + 1.0 - info->player_y) * delta_dist_y;
+	}
+	
+	// Perform DDA
+	hit = 0;
+	while (hit == 0)
+	{
+		// Jump to next map square, either in x-direction or y-direction
+		if (side_dist_x < side_dist_y)
 		{
-			// Determine wall hit side and texture coordinates
-			if (fabs(x - prev_x) > fabs(y - prev_y))
-			{
-				// Hit vertical wall (East/West)
-				result.hit_side = 0;
-				if (dx > 0)
-				{
-					result.wall_direction = 2; // East
-					result.texture = &info->textures.east;
-				}
-				else
-				{
-					result.wall_direction = 3; // West
-					result.texture = &info->textures.west;
-				}
-				result.wall_x = y - floor(y); // Texture Y coordinate
-			}
-			else
-			{
-				// Hit horizontal wall (North/South)
-				result.hit_side = 1;
-				if (dy > 0)
-				{
-					result.wall_direction = 1; // South
-					result.texture = &info->textures.south;
-				}
-				else
-				{
-					result.wall_direction = 0; // North
-					result.texture = &info->textures.north;
-				}
-				result.wall_x = x - floor(x); // Texture X coordinate
-			}
-			
-			// Adjust wall_x for proper texture mapping
-			if ((result.hit_side == 0 && dx > 0) || (result.hit_side == 1 && dy < 0))
-				result.wall_x = 1.0 - result.wall_x;
-			
+			side_dist_x += delta_dist_x;
+			map_x += step_x;
+			side = 0; // Vertical wall hit
+		}
+		else
+		{
+			side_dist_y += delta_dist_y;
+			map_y += step_y;
+			side = 1; // Horizontal wall hit
+		}
+		
+		// Check if ray has hit a wall
+		if (map_x < 0 || map_y < 0 || map_y >= info->map_height || 
+			map_x >= (int)ft_strlen(info->map[map_y]))
 			break;
+		if (info->map[map_y][map_x] == '1')
+			hit = 1;
+	}
+	
+	// Calculate distance
+	if (side == 0)
+		result.distance = (map_x - info->player_x + (1 - step_x) / 2) / ray_dir_x;
+	else
+		result.distance = (map_y - info->player_y + (1 - step_y) / 2) / ray_dir_y;
+	
+	// Calculate wall_x (where exactly the wall was hit)
+	double wall_x;
+	if (side == 0)
+		wall_x = info->player_y + result.distance * ray_dir_y;
+	else
+		wall_x = info->player_x + result.distance * ray_dir_x;
+	wall_x -= floor(wall_x);
+	
+	result.wall_x = wall_x;
+	result.hit_side = side;
+	
+	// Determine wall direction and texture
+	if (side == 0) // Vertical wall
+	{
+		if (step_x > 0)
+		{
+			result.wall_direction = 2; // East
+			result.texture = &info->textures.east;
+		}
+		else
+		{
+			result.wall_direction = 3; // West
+			result.texture = &info->textures.west;
+		}
+	}
+	else // Horizontal wall
+	{
+		if (step_y > 0)
+		{
+			result.wall_direction = 1; // South
+			result.texture = &info->textures.south;
+		}
+		else
+		{
+			result.wall_direction = 0; // North
+			result.texture = &info->textures.north;
 		}
 	}
 	
