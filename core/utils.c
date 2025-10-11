@@ -6,15 +6,19 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 14:51:53 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/05 14:51:54 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/11 19:32:56 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/cub3d.h"
 #include <math.h>
 
-#define MOVE_SPEED 0.3
-#define ROT_SPEED 0.15
+#ifndef M_PI
+# define M_PI 3.14159265358979323846
+#endif
+
+#define MOVE_SPEED 0.05
+#define ROT_SPEED 0.03
 
 /* Moves player forward based on current direction */
 void	move_forward(t_info *info)
@@ -111,11 +115,16 @@ double	get_player_angle(t_info *info)
 }
 
 /* Checks if position is valid (not a wall or out of bounds) */
+/* Uses a collision margin to prevent clipping into walls */
 int	is_valid_position(t_info *info, double x, double y)
 {
-	int	map_x;
-	int	map_y;
-
+	int		map_x;
+	int		map_y;
+	double	margin;
+	
+	margin = 0.2; // Collision margin to stay away from walls
+	
+	// Check center position
 	map_x = (int)x;
 	map_y = (int)y;
 	if (map_x < 0 || map_y < 0 || map_y >= info->map_height || 
@@ -123,5 +132,16 @@ int	is_valid_position(t_info *info, double x, double y)
 		return (0);
 	if (info->map[map_y][map_x] == '1')
 		return (0);
+	
+	// Check corners with margin
+	if (info->map[(int)(y - margin)][(int)(x - margin)] == '1')
+		return (0);
+	if (info->map[(int)(y - margin)][(int)(x + margin)] == '1')
+		return (0);
+	if (info->map[(int)(y + margin)][(int)(x - margin)] == '1')
+		return (0);
+	if (info->map[(int)(y + margin)][(int)(x + margin)] == '1')
+		return (0);
+	
 	return (1);
 }

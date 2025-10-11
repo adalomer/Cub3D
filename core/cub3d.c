@@ -6,16 +6,13 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 14:51:56 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/06 19:02:33 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/11 19:39:07 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/cub3d.h"
 #include "../libs/minilibx-linux/mlx.h"
 #include <stdio.h>
-
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 600
 
 /* Validates that filename has .cub extension */
 int	is_valid_file(const char *filename)
@@ -209,8 +206,17 @@ void	cub_main(t_info *info)
 	if (!load_textures(info))
 		safe_exit(1);
 	
+	// Hook for window close (X button)
 	mlx_hook(info->win, 17, 0, close_window, info);
-	mlx_key_hook(info->win, key_press, info);
+	
+	// Hook for key press (KeyPress = 2)
+	mlx_hook(info->win, 2, 1L<<0, key_press, info);
+	
+	// Hook for key release (KeyRelease = 3)
+	mlx_hook(info->win, 3, 1L<<1, key_release, info);
+	
+	// Game loop for continuous rendering and movement
 	mlx_loop_hook(info->mlx, game_loop, info);
+	
 	mlx_loop(info->mlx);
 }

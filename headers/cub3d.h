@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 02:14:59 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/05 14:33:45 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/11 19:38:53 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@
 # include "libft.h"
 # include "get_next_line.h"
 # include "mapchecker.h"
+
+#define SCREEN_WIDTH 800
+#define SCREEN_HEIGHT 600
 
 typedef struct s_point
 {
@@ -56,6 +59,17 @@ typedef struct s_ray_result
 	int		hit_side; // 0=vertical, 1=horizontal
 	t_texture_image	*texture;
 }	t_ray_result;
+
+// Key states for continuous movement
+typedef struct s_keys
+{
+	int	w;
+	int	s;
+	int	a;
+	int	d;
+	int	left;
+	int	right;
+}	t_keys;
 
 typedef struct s_info
 {
@@ -114,6 +128,9 @@ typedef struct s_info
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
+	
+	// Key states for continuous input
+	t_keys	keys;
 
 }	t_info;
 
@@ -134,6 +151,7 @@ int		parse_color(const char *color_str);
 // Game functions
 int		close_window(t_info *info);
 int		key_press(int keycode, t_info *info);
+int		key_release(int keycode, t_info *info);
 int		game_loop(t_info *info);
 
 // Movement functions

@@ -6,15 +6,12 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 14:51:11 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/06 19:19:07 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/11 19:39:11 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/cub3d.h"
 #include "../libs/minilibx-linux/mlx.h"
-
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 600
 
 /* Sets a pixel at coordinates (x,y) with given color in the image buffer */
 /* NOTE: This function is kept for compatibility but not used in main rendering */
@@ -145,37 +142,38 @@ void	draw_frame(t_info *info)
 }
 
 /* Fills the upper half with ceiling color and lower half with floor color */
+/* Fills the upper half with ceiling color and lower half with floor color */
 void	draw_ceiling_and_floor(t_info *info)
 {
-	int		x;
 	int		y;
-	char	*dst;
-	int		bytes_per_pixel;
+	char	*line_start;
+	int		x;
+	unsigned int	*pixel;
 
-	bytes_per_pixel = info->bits_per_pixel / 8;
-	
-	// Draw ceiling
+	// Draw ceiling - optimized line-by-line
 	y = 0;
 	while (y < SCREEN_HEIGHT / 2)
 	{
+		line_start = info->img_data + (y * info->line_length);
+		pixel = (unsigned int *)line_start;
 		x = 0;
 		while (x < SCREEN_WIDTH)
 		{
-			dst = info->img_data + (y * info->line_length + x * bytes_per_pixel);
-			*(unsigned int*)dst = info->ceiling_color;
+			pixel[x] = info->ceiling_color;
 			x++;
 		}
 		y++;
 	}
 	
-	// Draw floor
+	// Draw floor - optimized line-by-line
 	while (y < SCREEN_HEIGHT)
 	{
+		line_start = info->img_data + (y * info->line_length);
+		pixel = (unsigned int *)line_start;
 		x = 0;
 		while (x < SCREEN_WIDTH)
 		{
-			dst = info->img_data + (y * info->line_length + x * bytes_per_pixel);
-			*(unsigned int*)dst = info->floor_color;
+			pixel[x] = info->floor_color;
 			x++;
 		}
 		y++;

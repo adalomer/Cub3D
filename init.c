@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 02:29:58 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/05 14:33:46 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/11 19:32:58 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,15 @@ t_info	*init_info(void)
 	info->bits_per_pixel = 0;
 	info->line_length = 0;
 	info->endian = 0;
+	
+	// Initialize key states
+	info->keys.w = 0;
+	info->keys.s = 0;
+	info->keys.a = 0;
+	info->keys.d = 0;
+	info->keys.left = 0;
+	info->keys.right = 0;
+	
 	return (info);
 }
 

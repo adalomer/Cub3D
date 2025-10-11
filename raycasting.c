@@ -6,15 +6,13 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 02:30:06 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/06 19:19:07 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/11 19:39:02 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/cub3d.h"
 #include <math.h>
 
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 600
 #define FOV (M_PI / 3)
 
 void	cast_rays(t_info *info)
@@ -36,18 +34,19 @@ void	cast_rays(t_info *info)
 		// Fisheye correction
 		distance = ray_result.distance * cos(ray_angle - info->player_angle);
 		
-		// Prevent division by zero and unrealistic distances
-		if (distance < 0.1)
-			distance = 0.1;
-		if (distance > 50.0)
-			distance = 50.0;
+		// Prevent division by zero
+		if (distance < 0.01)
+			distance = 0.01;
 		
-		// Calculate wall height with reasonable limits
+		// Calculate wall height - no artificial limits for natural scaling
 		wall_height = (int)(SCREEN_HEIGHT / distance);
-		if (wall_height > SCREEN_HEIGHT * 2)
-			wall_height = SCREEN_HEIGHT * 2;
+		
+		// Only clamp to reasonable maximum to prevent overflow
+		if (wall_height > SCREEN_HEIGHT * 10)
+			wall_height = SCREEN_HEIGHT * 10;
 		if (wall_height < 1)
 			wall_height = 1;
+			
 		wall_start = (SCREEN_HEIGHT - wall_height) / 2;
 		wall_end = wall_start + wall_height;
 		
