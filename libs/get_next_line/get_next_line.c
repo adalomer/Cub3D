@@ -13,7 +13,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "../../headers/get_next_line.h"
-
 char	*ft_get_slice(char *cake)
 {
 	int		i;

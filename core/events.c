@@ -21,7 +21,6 @@
 #define LEFT_ARROW 65361
 #define RIGHT_ARROW 65363
 
-/* Handles window close event */
 int	close_window(t_info *info)
 {
 	mlx_destroy_window(info->mlx, info->win);
@@ -29,7 +28,6 @@ int	close_window(t_info *info)
 	return (0);
 }
 
-/* Handles keyboard input for movement and rotation */
 int	key_press(int keycode, t_info *info)
 {
 	if (keycode == ESC_KEY)
@@ -49,7 +47,6 @@ int	key_press(int keycode, t_info *info)
 	return (0);
 }
 
-/* Handles keyboard release */
 int	key_release(int keycode, t_info *info)
 {
 	if (keycode == W_KEY)
@@ -67,10 +64,8 @@ int	key_release(int keycode, t_info *info)
 	return (0);
 }
 
-/* Main game loop for continuous rendering */
 int	game_loop(t_info *info)
 {
-	// Handle continuous movement based on key states
 	if (info->keys.w)
 		move_forward(info);
 	if (info->keys.s)

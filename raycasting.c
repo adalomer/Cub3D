@@ -31,17 +31,13 @@ void	cast_rays(t_info *info)
 		ray_angle = info->player_angle - FOV / 2 + (double)x / SCREEN_WIDTH * FOV;
 		ray_result = cast_single_ray_detailed(info, ray_angle);
 		
-		// Fisheye correction
 		distance = ray_result.distance * cos(ray_angle - info->player_angle);
 		
-		// Prevent division by zero
 		if (distance < 0.01)
 			distance = 0.01;
 		
-		// Calculate wall height - no artificial limits for natural scaling
 		wall_height = (int)(SCREEN_HEIGHT / distance);
 		
-		// Only clamp to reasonable maximum to prevent overflow
 		if (wall_height > SCREEN_HEIGHT * 10)
 			wall_height = SCREEN_HEIGHT * 10;
 		if (wall_height < 1)
@@ -95,19 +91,15 @@ t_ray_result	cast_single_ray_detailed(t_info *info, double angle)
 	int hit;
 	int side;
 	
-	// Initialize ray direction
 	ray_dir_x = cos(angle);
 	ray_dir_y = sin(angle);
 	
-	// Current map position
 	map_x = (int)info->player_x;
 	map_y = (int)info->player_y;
 	
-	// Length of ray from one x or y-side to next x or y-side
 	delta_dist_x = (ray_dir_x == 0) ? 1e30 : fabs(1 / ray_dir_x);
 	delta_dist_y = (ray_dir_y == 0) ? 1e30 : fabs(1 / ray_dir_y);
 	
-	// Calculate step and initial side_dist
 	if (ray_dir_x < 0)
 	{
 		step_x = -1;
@@ -130,25 +122,22 @@ t_ray_result	cast_single_ray_detailed(t_info *info, double angle)
 		side_dist_y = (map_y + 1.0 - info->player_y) * delta_dist_y;
 	}
 	
-	// Perform DDA
 	hit = 0;
 	while (hit == 0)
 	{
-		// Jump to next map square, either in x-direction or y-direction
 		if (side_dist_x < side_dist_y)
 		{
 			side_dist_x += delta_dist_x;
 			map_x += step_x;
-			side = 0; // Vertical wall hit
+			side = 0;
 		}
 		else
 		{
 			side_dist_y += delta_dist_y;
 			map_y += step_y;
-			side = 1; // Horizontal wall hit
+			side = 1;
 		}
 		
-		// Check if ray has hit a wall
 		if (map_x < 0 || map_y < 0 || map_y >= info->map_height || 
 			map_x >= (int)ft_strlen(info->map[map_y]))
 			break;
@@ -156,13 +145,11 @@ t_ray_result	cast_single_ray_detailed(t_info *info, double angle)
 			hit = 1;
 	}
 	
-	// Calculate distance
 	if (side == 0)
 		result.distance = (map_x - info->player_x + (1 - step_x) / 2) / ray_dir_x;
 	else
 		result.distance = (map_y - info->player_y + (1 - step_y) / 2) / ray_dir_y;
 	
-	// Calculate wall_x (where exactly the wall was hit)
 	double wall_x;
 	if (side == 0)
 		wall_x = info->player_y + result.distance * ray_dir_y;
@@ -173,30 +160,29 @@ t_ray_result	cast_single_ray_detailed(t_info *info, double angle)
 	result.wall_x = wall_x;
 	result.hit_side = side;
 	
-	// Determine wall direction and texture
-	if (side == 0) // Vertical wall
+	if (side == 0)
 	{
 		if (step_x > 0)
 		{
-			result.wall_direction = 2; // East
+			result.wall_direction = 2;
 			result.texture = &info->textures.east;
 		}
 		else
 		{
-			result.wall_direction = 3; // West
+			result.wall_direction = 3;
 			result.texture = &info->textures.west;
 		}
 	}
-	else // Horizontal wall
+	else
 	{
 		if (step_y > 0)
 		{
-			result.wall_direction = 1; // South
+			result.wall_direction = 1;
 			result.texture = &info->textures.south;
 		}
 		else
 		{
-			result.wall_direction = 0; // North
+			result.wall_direction = 0;
 			result.texture = &info->textures.north;
 		}
 	}
@@ -231,25 +217,22 @@ int	get_wall_color(t_info *info, double angle)
 			break;
 		if (info->map[(int)y][(int)x] == '1')
 		{
-			// Determine wall direction
 			if (fabs(x - prev_x) > fabs(y - prev_y))
 			{
-				// Hit vertical wall
 				if (dx > 0)
-					return (0xFF6B6B); // East wall - red
+					return (0xFF6B6B);
 				else
-					return (0x4ECDC4); // West wall - cyan
+					return (0x4ECDC4);
 			}
 			else
 			{
-				// Hit horizontal wall  
 				if (dy > 0)
-					return (0x45B7D1); // South wall - blue
+					return (0x45B7D1);
 				else
-					return (0x96CEB4); // North wall - green
+					return (0x96CEB4);
 			}
 		}
 	}
-	return (0x808080); // Default gray
+	return (0x808080);
 }
 

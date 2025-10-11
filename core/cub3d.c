@@ -13,8 +13,6 @@
 #include "../headers/cub3d.h"
 #include "../libs/minilibx-linux/mlx.h"
 #include <stdio.h>
-
-/* Validates that filename has .cub extension */
 int	is_valid_file(const char *filename)
 {
 	const char	*ext;
@@ -25,7 +23,6 @@ int	is_valid_file(const char *filename)
 	return (1);
 }
 
-/* Opens and validates file descriptor for given filename */
 int	open_fd(const char *filename)
 {
 	int	fd;
@@ -36,20 +33,17 @@ int	open_fd(const char *filename)
 	return (fd);
 }
 
-/* Safely closes file descriptor */
 void	close_fd(int fd)
 {
 	if (fd >= 0)
 		close(fd);
 }
 
-/* Exits program with given code */
 void	safe_exit(int code)
 {
 	exit(code);
 }
 
-/* Loads XPM texture file and returns texture image structure */
 static t_texture_image	load_texture_image(t_info *info, char *path)
 {
 	t_texture_image	img;
@@ -104,7 +98,6 @@ static t_texture_image	load_texture_image(t_info *info, char *path)
 	return (img);
 }
 
-/* Creates a simple solid color texture as fallback */
 static t_texture_image	create_simple_texture(t_info *info, int color)
 {
 	t_texture_image	img;
@@ -143,7 +136,6 @@ static t_texture_image	create_simple_texture(t_info *info, int color)
 	return (img);
 }
 
-/* Loads all directional textures with XPM fallback to manual creation */
 static int	load_textures(t_info *info)
 {
 	printf("Trying to load XPM textures with manual fallback...\n");
@@ -206,16 +198,12 @@ void	cub_main(t_info *info)
 	if (!load_textures(info))
 		safe_exit(1);
 	
-	// Hook for window close (X button)
 	mlx_hook(info->win, 17, 0, close_window, info);
 	
-	// Hook for key press (KeyPress = 2)
 	mlx_hook(info->win, 2, 1L<<0, key_press, info);
 	
-	// Hook for key release (KeyRelease = 3)
 	mlx_hook(info->win, 3, 1L<<1, key_release, info);
 	
-	// Game loop for continuous rendering and movement
 	mlx_loop_hook(info->mlx, game_loop, info);
 	
 	mlx_loop(info->mlx);

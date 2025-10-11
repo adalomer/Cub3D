@@ -134,7 +134,6 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-// Simplified split function
 char	**ft_split(char const *s, char c)
 {
 	char	**result;
@@ -145,7 +144,7 @@ char	**ft_split(char const *s, char c)
 
 	if (!s)
 		return (NULL);
-	result = malloc(sizeof(char *) * 1000); // Simplified allocation
+	result = malloc(sizeof(char *) * 1000);
 	if (!result)
 		return (NULL);
 	i = 0;
@@ -195,7 +194,6 @@ char	*ft_strtrim(char const *s1, char const *set)
 	return (result);
 }
 
-// List functions
 t_list	*ft_lstnew(void *content)
 {
 	t_list	*new;

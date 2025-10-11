@@ -53,7 +53,6 @@ int	parse_color(const char *color_str)
 	int		b;
 	int		color;
 
-	// Trim whitespace from color string
 	trimmed = ft_strtrim(color_str, " \t\n\r\v\f");
 	if (!trimmed)
 		return (-1);
@@ -67,7 +66,6 @@ int	parse_color(const char *color_str)
 		return (-1);
 	}
 	
-	// Trim each RGB component
 	r = ft_atoi(ft_strtrim(rgb_parts[0], " \t"));
 	g = ft_atoi(ft_strtrim(rgb_parts[1], " \t"));
 	b = ft_atoi(ft_strtrim(rgb_parts[2], " \t"));

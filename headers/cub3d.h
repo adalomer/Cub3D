@@ -30,7 +30,6 @@ typedef struct s_point
 	int	y;
 }	t_point;
 
-// Texture and image structures
 typedef struct s_texture_image
 {
 	void	*ptr;
@@ -50,17 +49,15 @@ typedef struct s_textures
 	t_texture_image	west;
 }	t_textures;
 
-// Ray result structure for texture mapping
 typedef struct s_ray_result
 {
 	double	distance;
 	double	wall_x;
-	int		wall_direction; // 0=north, 1=south, 2=east, 3=west
-	int		hit_side; // 0=vertical, 1=horizontal
+	int		wall_direction;
+	int		hit_side;
 	t_texture_image	*texture;
 }	t_ray_result;
 
-// Key states for continuous movement
 typedef struct s_keys
 {
 	int	w;
@@ -73,28 +70,23 @@ typedef struct s_keys
 
 typedef struct s_info
 {
-	// Doku yolları
 	char	*no_texture;
 	char	*so_texture;
 	char	*we_texture;
 	char	*ea_texture;
 
-	// Texture images
 	void	*no_img;
 	void	*so_img;
 	void	*we_img;
 	void	*ea_img;
 	
-	// New texture system
 	t_textures	textures;
 	
-	// Old texture pointers (deprecated)
 	void	*texture_north;
 	void	*texture_south;
 	void	*texture_east;
 	void	*texture_west;
 	
-	// Texture path aliases
 	char	*no;
 	char	*so;
 	char	*ea;
@@ -103,24 +95,20 @@ typedef struct s_info
 	int		tex_width;
 	int		tex_height;
 
-	// Zemin ve tavan renkleri
 	int		floor_color;
 	int		ceiling_color;
 
 	int		identifiers_found;
 
-	// Harita
 	char	**map;
 	int		map_width;
 	int		map_height;
 
-	// Oyuncu başlangıç bilgileri
 	double	player_x;
 	double	player_y;
 	char	player_dir;
 	double	player_angle;
 
-	// MLX ile ilgili pointerlar
 	void	*mlx;
 	void	*win;
 	void	*img;
@@ -129,12 +117,10 @@ typedef struct s_info
 	int		line_length;
 	int		endian;
 	
-	// Key states for continuous input
 	t_keys	keys;
 
 }	t_info;
 
-// Function Prototypes
 t_info	*parse_file(int fd);
 t_info	*init_info(void);
 int		is_valid_file(const char *filename);
@@ -143,18 +129,15 @@ void	close_fd(int fd);
 void	cub_main(t_info *info);
 void	safe_exit(int code);
 
-// Parser utils
 int		is_empty_line(const char *line);
 void	free_split(char **split_array);
 int		parse_color(const char *color_str);
 
-// Game functions
 int		close_window(t_info *info);
 int		key_press(int keycode, t_info *info);
 int		key_release(int keycode, t_info *info);
 int		game_loop(t_info *info);
 
-// Movement functions
 void	move_forward(t_info *info);
 void	move_backward(t_info *info);
 void	move_left(t_info *info);
@@ -164,7 +147,6 @@ void	rotate_right(t_info *info);
 double	get_player_angle(t_info *info);
 int		is_valid_position(t_info *info, double x, double y);
 
-// Raycasting functions
 void	cast_rays(t_info *info);
 double	cast_single_ray(t_info *info, double angle);
 t_ray_result	cast_single_ray_detailed(t_info *info, double angle);
@@ -172,7 +154,6 @@ int		get_wall_color(t_info *info, double angle);
 void	draw_textured_line(t_info *info, int x, int start, int end, t_ray_result *ray);
 int		get_pixel_from_texture(t_texture_image *texture, int x, int y);
 
-// Drawing functions
 void	draw_frame(t_info *info);
 void	draw_ceiling_and_floor(t_info *info);
 void	draw_vertical_line(t_info *info, int x, int start, int end, int color);

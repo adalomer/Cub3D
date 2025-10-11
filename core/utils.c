@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 14:51:53 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/11 19:32:56 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/12 01:07:25 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,9 @@
 # define M_PI 3.14159265358979323846
 #endif
 
-#define MOVE_SPEED 0.05
-#define ROT_SPEED 0.03
+#define MOVE_SPEED 0.0125
+#define ROT_SPEED 0.0125
 
-/* Moves player forward based on current direction */
 void	move_forward(t_info *info)
 {
 	double	new_x;
@@ -39,7 +38,6 @@ void	move_forward(t_info *info)
 	}
 }
 
-/* Moves player backward (opposite to current direction) */
 void	move_backward(t_info *info)
 {
 	double	new_x;
@@ -58,7 +56,6 @@ void	move_backward(t_info *info)
 	}
 }
 
-/* Moves player left (perpendicular to current direction) */
 void	move_left(t_info *info)
 {
 	double	new_x;
@@ -77,7 +74,6 @@ void	move_left(t_info *info)
 	}
 }
 
-/* Moves player right (perpendicular to current direction) */
 void	move_right(t_info *info)
 {
 	double	new_x;
@@ -96,35 +92,29 @@ void	move_right(t_info *info)
 	}
 }
 
-/* Rotates player view to the left */
 void	rotate_left(t_info *info)
 {
 	info->player_angle -= ROT_SPEED;
 }
 
-/* Rotates player view to the right */
 void	rotate_right(t_info *info)
 {
 	info->player_angle += ROT_SPEED;
 }
 
-/* Returns current player angle */
 double	get_player_angle(t_info *info)
 {
 	return (info->player_angle);
 }
 
-/* Checks if position is valid (not a wall or out of bounds) */
-/* Uses a collision margin to prevent clipping into walls */
 int	is_valid_position(t_info *info, double x, double y)
 {
 	int		map_x;
 	int		map_y;
 	double	margin;
 	
-	margin = 0.2; // Collision margin to stay away from walls
+	margin = 0.2;
 	
-	// Check center position
 	map_x = (int)x;
 	map_y = (int)y;
 	if (map_x < 0 || map_y < 0 || map_y >= info->map_height || 
@@ -133,7 +123,6 @@ int	is_valid_position(t_info *info, double x, double y)
 	if (info->map[map_y][map_x] == '1')
 		return (0);
 	
-	// Check corners with margin
 	if (info->map[(int)(y - margin)][(int)(x - margin)] == '1')
 		return (0);
 	if (info->map[(int)(y - margin)][(int)(x + margin)] == '1')

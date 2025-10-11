@@ -19,7 +19,6 @@ t_info	*init_info(void)
 	info = malloc(sizeof(t_info));
 	if (!info)
 		return (NULL);
-	// Initialize new texture system
 	info->textures.north = (t_texture_image){0};
 	info->textures.south = (t_texture_image){0};
 	info->textures.east = (t_texture_image){0};
@@ -61,7 +60,6 @@ t_info	*init_info(void)
 	info->line_length = 0;
 	info->endian = 0;
 	
-	// Initialize key states
 	info->keys.w = 0;
 	info->keys.s = 0;
 	info->keys.a = 0;

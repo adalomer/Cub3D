@@ -13,7 +13,6 @@
 #include "../headers/cub3d.h"
 #include "../headers/libft.h"
 #include <math.h>
-
 static int	check_characters_and_player(t_info *info)
 {
 	int	x;

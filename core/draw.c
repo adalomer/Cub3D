@@ -13,8 +13,6 @@
 #include "../headers/cub3d.h"
 #include "../libs/minilibx-linux/mlx.h"
 
-/* Sets a pixel at coordinates (x,y) with given color in the image buffer */
-/* NOTE: This function is kept for compatibility but not used in main rendering */
 void	put_pixel(t_info *info, int x, int y, int color)
 {
 	char	*dst;
@@ -26,7 +24,6 @@ void	put_pixel(t_info *info, int x, int y, int color)
 	}
 }
 
-/* Extracts pixel color from texture at given coordinates */
 int	get_pixel_from_texture(t_texture_image *texture, int x, int y)
 {
 	char	*addr;
@@ -59,7 +56,6 @@ int	get_pixel_from_texture(t_texture_image *texture, int x, int y)
 	return (pixel);
 }
 
-/* Draws a vertical textured line from start to end at column x */
 void	draw_textured_line(t_info *info, int x, int start, int end, t_ray_result *ray)
 {
 	int		y;
@@ -76,15 +72,12 @@ void	draw_textured_line(t_info *info, int x, int start, int end, t_ray_result *r
 	
 	if (ray->texture && ray->texture->ptr)
 	{
-		// Calculate texture X coordinate (which column of the texture to use)
 		tex_x = (int)(ray->wall_x * ray->texture->width);
 		if (tex_x < 0) tex_x = 0;
 		if (tex_x >= ray->texture->width) tex_x = ray->texture->width - 1;
 		
-		// Calculate step: how much texture Y changes per screen pixel
 		step_y = (double)ray->texture->height / wall_height;
 		
-		// Start at the top of the wall texture
 		tex_pos = 0;
 	}
 	else
@@ -118,7 +111,6 @@ void	draw_textured_line(t_info *info, int x, int start, int end, t_ray_result *r
 				else
 					color = 0x4ECDC4;
 			}
-			// Direct image buffer write instead of put_pixel function call
 			dst = info->img_data + (y * info->line_length + x * (info->bits_per_pixel / 8));
 			*(unsigned int*)dst = color;
 		}
@@ -127,7 +119,6 @@ void	draw_textured_line(t_info *info, int x, int start, int end, t_ray_result *r
 	}
 }
 
-/* Creates image buffer, renders frame, and displays it */
 void	draw_frame(t_info *info)
 {
 	if (!info->img)
@@ -141,8 +132,6 @@ void	draw_frame(t_info *info)
 	mlx_put_image_to_window(info->mlx, info->win, info->img, 0, 0);
 }
 
-/* Fills the upper half with ceiling color and lower half with floor color */
-/* Fills the upper half with ceiling color and lower half with floor color */
 void	draw_ceiling_and_floor(t_info *info)
 {
 	int		y;
@@ -150,7 +139,6 @@ void	draw_ceiling_and_floor(t_info *info)
 	int		x;
 	unsigned int	*pixel;
 
-	// Draw ceiling - optimized line-by-line
 	y = 0;
 	while (y < SCREEN_HEIGHT / 2)
 	{
@@ -165,7 +153,6 @@ void	draw_ceiling_and_floor(t_info *info)
 		y++;
 	}
 	
-	// Draw floor - optimized line-by-line
 	while (y < SCREEN_HEIGHT)
 	{
 		line_start = info->img_data + (y * info->line_length);
@@ -180,7 +167,6 @@ void	draw_ceiling_and_floor(t_info *info)
 	}
 }
 
-/* Draws a solid color vertical line from start to end at column x */
 void	draw_vertical_line(t_info *info, int x, int start, int end, int color)
 {
 	int		y;

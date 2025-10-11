@@ -34,7 +34,6 @@ void	ft_putstr_fd(char *s, int fd);
 int		ft_atoi(const char *str);
 char	*ft_strchr(const char *s, int c);
 
-// List functions
 t_list	*ft_lstnew(void *content);
 void	ft_lstadd_back(t_list **lst, t_list *new);
 int		ft_lstsize(t_list *lst);

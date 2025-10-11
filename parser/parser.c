@@ -73,7 +73,6 @@ static int	process_identifier_line(char *line, t_info *info)
 	char	*trimmed;
 	int		is_valid;
 
-	// Trim and split by whitespace (space or tab)
 	trimmed = ft_strtrim(line, " \t\n\r\v\f");
 	if (!trimmed || trimmed[0] == '\0')
 	{
@@ -153,7 +152,6 @@ static int	parse_map(int fd, t_info *info)
 		{
 			if (empty_count > 0 && map_started)
 			{
-				// Allow empty lines in map but warn
 				ft_putstr_fd("Warning: Empty lines in map ignored\n", 2);
 			}
 			map_started = 1;
