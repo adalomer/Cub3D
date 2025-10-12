@@ -6,12 +6,47 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/12 02:00:00 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/12 04:39:35 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/12 05:33:58 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/cub3d.h"
 #include "../libs/minilibx-linux/mlx.h"
+
+int	get_pixel_from_texture(t_texture_image *texture, int x, int y)
+{
+	char	*addr;
+	int		byte_per_pixel;
+	int		pixel;
+
+	if (!texture || !texture->ptr || !texture->data_addr)
+		return (0x808080);
+	if (x < 0 || x >= texture->width || y < 0 || y >= texture->height)
+		return (0x808080);
+	byte_per_pixel = texture->bits_per_pixel / 8;
+	addr = texture->data_addr + texture->size_line * y + byte_per_pixel * x;
+	if (byte_per_pixel == 4)
+		pixel = *(int *)addr;
+	else if (byte_per_pixel == 3)
+		pixel = (addr[2] << 16) | (addr[1] << 8) | addr[0];
+	else if (byte_per_pixel == 2)
+		pixel = *(short *)addr;
+	else
+		pixel = *addr;
+	return (pixel);
+}
+
+void	put_pixel(t_info *info, int x, int y, int color)
+{
+	char	*dst;
+
+	if (x >= 0 && x < SCREEN_WIDTH && y >= 0 && y < SCREEN_HEIGHT)
+	{
+		dst = info->img_data + (y * info->line_length
+				+ x * (info->bits_per_pixel / 8));
+		*(unsigned int *)dst = color;
+	}
+}
 
 static void	draw_ceiling(t_info *info)
 {
@@ -61,24 +96,4 @@ void	draw_ceiling_and_floor(t_info *info)
 {
 	draw_ceiling(info);
 	draw_floor(info);
-}
-
-void	draw_vertical_line(t_draw_params params)
-{
-	int		y;
-	char	*dst;
-	int		bytes_per_pixel;
-
-	bytes_per_pixel = params.info->bits_per_pixel / 8;
-	y = params.start;
-	while (y <= params.end && y < SCREEN_HEIGHT)
-	{
-		if (y >= 0)
-		{
-			dst = params.info->img_data + (y * params.info->line_length
-					+ params.x * bytes_per_pixel);
-			*(unsigned int *)dst = params.color;
-		}
-		y++;
-	}
 }

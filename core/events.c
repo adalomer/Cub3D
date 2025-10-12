@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 14:51:50 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/12 04:39:35 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/12 05:33:58 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ int	game_loop(t_info *info)
 		rotate_left(info);
 	if (info->keys.right)
 		rotate_right(info);
-	
 	draw_frame(info);
 	return (0);
 }

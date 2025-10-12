@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 00:39:45 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/12 04:39:35 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/12 05:33:58 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static int	parse_identifiers(int fd, t_info *info)
 	{
 		line = get_next_line(fd);
 		if (!line)
-			break;
+			break ;
 		if (!is_empty_line(line))
 		{
 			if (!process_identifier_line(line, info))
@@ -66,7 +66,6 @@ static int	parse_identifiers(int fd, t_info *info)
 		return (0);
 	return (1);
 }
-
 
 static int	process_map_line(char *line, t_list **map_lines,
 		int *map_started, int *empty_count)
@@ -92,6 +91,21 @@ static int	process_map_line(char *line, t_list **map_lines,
 	}
 }
 
+static int	validate_and_convert_map(t_info *info, t_list *map_lines)
+{
+	if (!map_lines)
+	{
+		ft_putstr_fd("Error: No map found\n", 2);
+		return (0);
+	}
+	info->map_height = ft_lstsize(map_lines);
+	info->map = convert_list_to_map(map_lines, info->map_height);
+	ft_lstclear(&map_lines, free);
+	if (!info->map || !validate_map(info))
+		return (0);
+	return (1);
+}
+
 static int	parse_map(int fd, t_info *info)
 {
 	char	*line;
@@ -102,19 +116,12 @@ static int	parse_map(int fd, t_info *info)
 	map_lines = NULL;
 	map_started = 0;
 	empty_count = 0;
-	while ((line = get_next_line(fd)) != NULL)
+	line = get_next_line(fd);
+	while (line != NULL)
 	{
 		process_map_line(line, &map_lines, &map_started, &empty_count);
 		free(line);
+		line = get_next_line(fd);
 	}
-	if (!map_lines)
-		return (ft_putstr_fd("Error: No map found\n", 2), 0);
-	info->map_height = ft_lstsize(map_lines);
-	info->map = convert_list_to_map(map_lines, info->map_height);
-	ft_lstclear(&map_lines, free);
-	if (!info->map || !validate_map(info))
-		return (0);
-	return (1);
+	return (validate_and_convert_map(info, map_lines));
 }
-
-

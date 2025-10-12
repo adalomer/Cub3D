@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 14:51:56 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/12 04:39:35 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/12 05:33:58 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,22 +57,11 @@ t_texture_image	load_texture_image(t_info *info, char *path)
 			img.width, img.height), img);
 }
 
-static void	fill_texture_pixels(int *pixel_data, int color)
-{
-	int	i;
-
-	i = 0;
-	while (i < 64 * 64)
-	{
-		pixel_data[i] = color;
-		i++;
-	}
-}
-
 t_texture_image	create_simple_texture(t_info *info, int color)
 {
 	t_texture_image	img;
 	int				*pixel_data;
+	int				i;
 
 	img.ptr = mlx_new_image(info->mlx, 64, 64);
 	if (!img.ptr)
@@ -88,7 +77,9 @@ t_texture_image	create_simple_texture(t_info *info, int color)
 		return ((t_texture_image){0});
 	}
 	pixel_data = (int *)img.data_addr;
-	fill_texture_pixels(pixel_data, color);
+	i = -1;
+	while (++i < 64 * 64)
+		pixel_data[i] = color;
 	printf("Created simple texture with color 0x%X\n", color);
 	return (img);
 }

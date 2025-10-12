@@ -76,4 +76,3 @@ t_info	*init_info(void)
 	init_map_and_player(info);
 	return (info);
 }
-

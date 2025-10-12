@@ -1,37 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   defines.h                                          :+:      :+:    :+:   */
+/*   file_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/12 02:00:00 by omadali           #+#    #+#             */
+/*   Created: 2025/10/12 05:00:00 by omadali           #+#    #+#             */
 /*   Updated: 2025/10/12 05:33:58 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef DEFINES_H
-# define DEFINES_H
+#include "headers/cub3d.h"
 
-# include <math.h>
+int	is_valid_file(const char *filename)
+{
+	const char	*ext;
 
-# ifndef M_PI
-#  define M_PI 3.14159265358979323846
-# endif
+	ext = ft_strrchr(filename, '.');
+	if (!ext || ft_strncmp(ext, ".cub", 5) != 0)
+		return (0);
+	return (1);
+}
 
-# define SCREEN_WIDTH 800
-# define SCREEN_HEIGHT 600
+int	open_fd(const char *filename)
+{
+	int	fd;
 
-# define ESC_KEY 65307
-# define W_KEY 119
-# define S_KEY 115
-# define A_KEY 97
-# define D_KEY 100
-# define LEFT_ARROW 65361
-# define RIGHT_ARROW 65363
+	fd = open(filename, O_RDONLY);
+	if (fd < 0)
+		ft_putstr_fd("Error: Could not open file.\n", 2);
+	return (fd);
+}
 
-# define MOVE_SPEED 0.0125
-# define ROT_SPEED 0.0125
-# define FOV_DIVISOR 3.0
+void	close_fd(int fd)
+{
+	if (fd >= 0)
+		close(fd);
+}
 
-#endif
+void	safe_exit(int code)
+{
+	exit(code);
+}

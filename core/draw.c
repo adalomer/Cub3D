@@ -6,52 +6,12 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 14:51:11 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/12 04:39:35 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/12 05:33:58 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/cub3d.h"
 #include "../libs/minilibx-linux/mlx.h"
-
-void	put_pixel(t_info *info, int x, int y, int color)
-{
-	char	*dst;
-
-	if (x >= 0 && x < SCREEN_WIDTH && y >= 0 && y < SCREEN_HEIGHT)
-	{
-		dst = info->img_data + (y * info->line_length + x * (info->bits_per_pixel / 8));
-		*(unsigned int*)dst = color;
-	}
-}
-
-static int	get_pixel_value(char *addr, int byte_per_pixel)
-{
-	int	pixel;
-
-	if (byte_per_pixel == 4)
-		pixel = *(int *)addr;
-	else if (byte_per_pixel == 3)
-		pixel = (addr[2] << 16) | (addr[1] << 8) | addr[0];
-	else if (byte_per_pixel == 2)
-		pixel = *(short *)addr;
-	else
-		pixel = *addr;
-	return (pixel);
-}
-
-int	get_pixel_from_texture(t_texture_image *texture, int x, int y)
-{
-	char	*addr;
-	int		byte_per_pixel;
-
-	if (!texture || !texture->ptr || !texture->data_addr)
-		return (0x808080);
-	if (x < 0 || x >= texture->width || y < 0 || y >= texture->height)
-		return (0x808080);
-	byte_per_pixel = texture->bits_per_pixel / 8;
-	addr = texture->data_addr + texture->size_line * y + byte_per_pixel * x;
-	return (get_pixel_value(addr, byte_per_pixel));
-}
 
 static void	init_texture_params(t_draw_params params, int *tex_x,
 		double *step_y, int wall_height)
@@ -107,7 +67,6 @@ void	draw_textured_line(t_draw_params params)
 	int		tex_x;
 	double	step_y;
 	double	tex_pos;
-	char	*dst;
 	int		wall_height;
 
 	wall_height = params.end - params.start;
@@ -120,10 +79,10 @@ void	draw_textured_line(t_draw_params params)
 	{
 		if (y >= 0)
 		{
-			dst = params.info->img_data + (y * params.info->line_length
-					+ params.x * (params.info->bits_per_pixel / 8));
-			*(unsigned int *)dst = get_wall_pixel_color(params,
-					tex_x, (int)tex_pos);
+			*(unsigned int *)(params.info->img_data + (y
+						* params.info->line_length + params.x
+						* (params.info->bits_per_pixel / 8)))
+				= get_wall_pixel_color(params, tex_x, (int)tex_pos);
 		}
 		tex_pos += step_y;
 	}
