@@ -6,24 +6,18 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 02:29:58 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/11 19:32:58 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/12 04:39:35 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/cub3d.h"
 
-t_info	*init_info(void)
+static void	init_textures(t_info *info)
 {
-	t_info	*info;
-
-	info = malloc(sizeof(t_info));
-	if (!info)
-		return (NULL);
 	info->textures.north = (t_texture_image){0};
 	info->textures.south = (t_texture_image){0};
 	info->textures.east = (t_texture_image){0};
 	info->textures.west = (t_texture_image){0};
-	
 	info->texture_north = NULL;
 	info->texture_south = NULL;
 	info->texture_east = NULL;
@@ -42,6 +36,10 @@ t_info	*init_info(void)
 	info->ea_img = NULL;
 	info->tex_width = 64;
 	info->tex_height = 64;
+}
+
+static void	init_map_and_player(t_info *info)
+{
 	info->floor_color = -1;
 	info->ceiling_color = -1;
 	info->identifiers_found = 0;
@@ -59,14 +57,23 @@ t_info	*init_info(void)
 	info->bits_per_pixel = 0;
 	info->line_length = 0;
 	info->endian = 0;
-	
 	info->keys.w = 0;
 	info->keys.s = 0;
 	info->keys.a = 0;
 	info->keys.d = 0;
 	info->keys.left = 0;
 	info->keys.right = 0;
-	
+}
+
+t_info	*init_info(void)
+{
+	t_info	*info;
+
+	info = malloc(sizeof(t_info));
+	if (!info)
+		return (NULL);
+	init_textures(info);
+	init_map_and_player(info);
 	return (info);
 }
 

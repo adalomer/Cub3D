@@ -6,13 +6,40 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/24 15:12:48 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/05 14:33:47 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/12 04:39:35 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/cub3d.h"
 #include "../headers/libft.h"
 #include <math.h>
+static void	set_player_info(t_info *info, int x, int y, char dir)
+{
+	info->player_dir = dir;
+	info->player_x = (double)x + 0.5;
+	info->player_y = (double)y + 0.5;
+	if (dir == 'N')
+		info->player_angle = -M_PI / 2;
+	else if (dir == 'S')
+		info->player_angle = M_PI / 2;
+	else if (dir == 'W')
+		info->player_angle = M_PI;
+	else if (dir == 'E')
+		info->player_angle = 0;
+}
+
+static int	check_character(t_info *info, int x, int y, int *player_count)
+{
+	if (ft_strchr("NSEW", info->map[y][x]))
+	{
+		set_player_info(info, x, y, info->map[y][x]);
+		(*player_count)++;
+	}
+	else if (!ft_strchr("01 ", info->map[y][x]))
+		return (0);
+	return (1);
+}
+
 static int	check_characters_and_player(t_info *info)
 {
 	int	x;
@@ -20,31 +47,13 @@ static int	check_characters_and_player(t_info *info)
 	int	player_count;
 
 	player_count = 0;
-	y = 0;
-	while (info->map[y])
+	y = -1;
+	while (info->map[++y])
 	{
-		x = 0;
-		while (info->map[y][x])
-		{		if (ft_strchr("NSEW", info->map[y][x]))
-		{
-			info->player_dir = info->map[y][x];
-			info->player_x = (double)x + 0.5;
-			info->player_y = (double)y + 0.5;
-			if (info->map[y][x] == 'N')
-				info->player_angle = -M_PI / 2;
-			else if (info->map[y][x] == 'S')
-				info->player_angle = M_PI / 2;
-			else if (info->map[y][x] == 'W')
-				info->player_angle = M_PI;
-			else if (info->map[y][x] == 'E')
-				info->player_angle = 0;
-			player_count++;
-		}
-			else if (!ft_strchr("01 ", info->map[y][x]))
+		x = -1;
+		while (info->map[y][++x])
+			if (!check_character(info, x, y, &player_count))
 				return (ft_putstr_fd("Error: Invalid map character\n", 2), 0);
-			x++;
-		}
-		y++;
 	}
 	if (player_count != 1)
 		return (ft_putstr_fd("Error: Invalid player count\n", 2), 0);

@@ -6,20 +6,12 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 14:51:50 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/11 19:32:59 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/12 04:39:35 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/cub3d.h"
 #include "../libs/minilibx-linux/mlx.h"
-
-#define ESC_KEY 65307
-#define W_KEY 119
-#define S_KEY 115
-#define A_KEY 97
-#define D_KEY 100
-#define LEFT_ARROW 65361
-#define RIGHT_ARROW 65363
 
 int	close_window(t_info *info)
 {

@@ -5,14 +5,20 @@ SRCS = libs/get_next_line/get_next_line.c \
 	   libs/libft/libft.c \
 	   parser/parser.c \
 	   parser/parser_utils.c \
+	   parser/parser_identifier.c \
+	   parser/parser_map_utils.c \
 	   parser/map_checker.c \
 	   main.c \
 	   core/cub3d.c \
 	   init.c \
 	   core/draw.c \
+	   core/draw2.c \
 	   raycasting.c \
+	   raycasting_utils.c \
 	   core/events.c \
 	   core/utils.c \
+	   core/utils2.c \
+	   core/texture_loader.c \
 	   gc/gc.c
 
 OBJS = $(SRCS:.c=.o)
