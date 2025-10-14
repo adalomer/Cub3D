@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 14:51:56 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/12 05:33:58 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/14 16:11:06 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,11 @@ static void	setup_hooks(t_info *info)
 
 void	cub_main(t_info *info)
 {
+	if (!info)
+	{
+		ft_putstr_fd("Error: NULL info pointer in cub_main\n", 2);
+		safe_exit(1);
+	}
 	info->mlx = mlx_init();
 	if (!info->mlx)
 	{

@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 00:39:45 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/12 05:33:58 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/14 16:11:06 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,18 +26,29 @@ t_info	*parse_file(int fd)
 {
 	t_info	*info;
 
+	if (fd < 0)
+	{
+		ft_putstr_fd("Error: Invalid file descriptor\n", 2);
+		return (NULL);
+	}
 	info = init_info();
 	if (!info)
+	{
+		ft_putstr_fd("Error: Memory allocation failed\n", 2);
 		return (NULL);
+	}
 	if (!parse_identifiers(fd, info))
 	{
 		ft_putstr_fd("Error: Invalid or incomplete identifiers.\n", 2);
+		free(info);
 		return (NULL);
 	}
 	if (!parse_map(fd, info))
 	{
-		free_map_data(info->map);
+		if (info->map)
+			free_map_data(info->map);
 		ft_putstr_fd("Error: Invalid map.\n", 2);
+		free(info);
 		return (NULL);
 	}
 	return (info);
@@ -98,11 +109,31 @@ static int	validate_and_convert_map(t_info *info, t_list *map_lines)
 		ft_putstr_fd("Error: No map found\n", 2);
 		return (0);
 	}
+	if (!info)
+	{
+		ft_putstr_fd("Error: Info structure is NULL\n", 2);
+		ft_lstclear(&map_lines, free);
+		return (0);
+	}
 	info->map_height = ft_lstsize(map_lines);
+	if (info->map_height == 0)
+	{
+		ft_putstr_fd("Error: Empty map\n", 2);
+		ft_lstclear(&map_lines, free);
+		return (0);
+	}
 	info->map = convert_list_to_map(map_lines, info->map_height);
 	ft_lstclear(&map_lines, free);
-	if (!info->map || !validate_map(info))
+	if (!info->map)
+	{
+		ft_putstr_fd("Error: Map conversion failed\n", 2);
 		return (0);
+	}
+	if (!validate_map(info))
+	{
+		ft_putstr_fd("Error: Map validation failed\n", 2);
+		return (0);
+	}
 	return (1);
 }
 

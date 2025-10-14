@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 14:00:00 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/12 05:33:58 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/14 16:11:06 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,23 @@ void	free_split(char **split_array)
 
 static int	parse_rgb_values(char **rgb_parts, int *r, int *g, int *b)
 {
-	*r = ft_atoi(ft_strtrim(rgb_parts[0], " \t"));
-	*g = ft_atoi(ft_strtrim(rgb_parts[1], " \t"));
-	*b = ft_atoi(ft_strtrim(rgb_parts[2], " \t"));
+	char	*tmp_r;
+	char	*tmp_g;
+	char	*tmp_b;
+
+	if (!rgb_parts || !rgb_parts[0] || !rgb_parts[1] || !rgb_parts[2])
+		return (0);
+	tmp_r = ft_strtrim(rgb_parts[0], " \t");
+	tmp_g = ft_strtrim(rgb_parts[1], " \t");
+	tmp_b = ft_strtrim(rgb_parts[2], " \t");
+	if (!tmp_r || !tmp_g || !tmp_b)
+		return (free(tmp_r), free(tmp_g), free(tmp_b), 0);
+	*r = ft_atoi(tmp_r);
+	*g = ft_atoi(tmp_g);
+	*b = ft_atoi(tmp_b);
+	free(tmp_r);
+	free(tmp_g);
+	free(tmp_b);
 	if (*r < 0 || *r > 255 || *g < 0 || *g > 255 || *b < 0 || *b > 255)
 		return (0);
 	return (1);

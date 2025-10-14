@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/24 15:12:48 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/12 05:33:58 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/14 16:11:06 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,14 @@ static int	check_characters_and_player(t_info *info)
 	int	y;
 	int	player_count;
 
+	if (!info || !info->map)
+		return (ft_putstr_fd("Error: NULL map pointer\n", 2), 0);
 	player_count = 0;
 	y = -1;
 	while (info->map[++y])
 	{
+		if (!info->map[y])
+			return (ft_putstr_fd("Error: NULL map line\n", 2), 0);
 		x = -1;
 		while (info->map[y][++x])
 			if (!check_character(info, x, y, &player_count))
@@ -63,6 +67,21 @@ static int	check_characters_and_player(t_info *info)
 
 int	validate_map(t_info *info)
 {
+	if (!info)
+	{
+		ft_putstr_fd("Error: NULL info pointer\n", 2);
+		return (0);
+	}
+	if (!info->map)
+	{
+		ft_putstr_fd("Error: NULL map\n", 2);
+		return (0);
+	}
+	if (info->map_height < 3)
+	{
+		ft_putstr_fd("Error: Map too small (min 3 lines)\n", 2);
+		return (0);
+	}
 	if (!check_characters_and_player(info))
 		return (0);
 	return (1);
