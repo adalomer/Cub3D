@@ -15,14 +15,13 @@ SRCS = libs/get_next_line/get_next_line.c \
 	   core/draw.c \
 	   core/draw2.c \
 	   core/draw3.c \
-	   raycasting.c \
-	   raycasting_utils.c \
-	   raycasting_dda.c \
+	   raycasting/raycasting.c \
+	   raycasting/raycasting_utils.c \
+	   raycasting/raycasting_dda.c \
 	   core/events.c \
 	   core/utils.c \
 	   core/utils2.c \
 	   core/texture_loader.c \
-	   gc/gc.c
 
 OBJS = $(SRCS:.c=.o)
 
