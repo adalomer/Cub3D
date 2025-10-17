@@ -1,30 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_memchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/07 00:44:10 by omadali           #+#    #+#             */
+/*   Created: 2024/09/27 19:44:16 by omadali           #+#    #+#             */
 /*   Updated: 2025/10/17 19:30:16 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 1
-# endif
+void	*ft_memchr(const void *s, int c, size_t n)
+{
+	size_t			a;
+	unsigned char	*d;
 
-#include <stdlib.h>
-
-char	*ft_get_slice(char *cake);
-char	*ft_get_leftover(char *cake);
-char	*ft_make_cake(int fd, char *cake);
-char	*get_next_line(int fd);
-char	*ft_strjoin_gnl(char *s1, char *s2);
-int		ft_strchr_gnl(char *str);
-size_t	ft_strlen_gnl(char *s);
-
-#endif
+	d = (unsigned char *)s;
+	a = 0;
+	c = (unsigned char)c;
+	while (a < n)
+	{
+		if (d[a] == (unsigned char)c)
+			return ((void *)&d[a]);
+		a++;
+	}
+	return (0);
+}

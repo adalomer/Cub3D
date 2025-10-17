@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 00:39:30 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/05 14:33:42 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/17 19:30:16 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ char	*ft_make_cake(int fd, char *cake)
 			return (NULL);
 		}
 		new_slice[slice_len] = '\0';
-		cake = ft_strjoin(cake, new_slice);
+		cake = ft_strjoin_gnl(cake, new_slice);
 	}
 	free(new_slice);
 	return (cake);

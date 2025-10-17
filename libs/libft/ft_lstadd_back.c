@@ -1,30 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_lstadd_back.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/07 00:44:10 by omadali           #+#    #+#             */
+/*   Created: 2025/10/17 00:00:00 by omadali           #+#    #+#             */
 /*   Updated: 2025/10/17 19:30:16 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 1
-# endif
+static t_list	*ft_lstlast(t_list *lst)
+{
+	if (!lst)
+		return (NULL);
+	while (lst->next)
+		lst = lst->next;
+	return (lst);
+}
 
-#include <stdlib.h>
+void	ft_lstadd_back(t_list **lst, t_list *new)
+{
+	t_list	*last;
 
-char	*ft_get_slice(char *cake);
-char	*ft_get_leftover(char *cake);
-char	*ft_make_cake(int fd, char *cake);
-char	*get_next_line(int fd);
-char	*ft_strjoin_gnl(char *s1, char *s2);
-int		ft_strchr_gnl(char *str);
-size_t	ft_strlen_gnl(char *s);
-
-#endif
+	if (!lst || !new)
+		return ;
+	if (!*lst)
+	{
+		*lst = new;
+		return ;
+	}
+	last = ft_lstlast(*lst);
+	last->next = new;
+}

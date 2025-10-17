@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 00:47:19 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/05 14:33:42 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/17 19:30:16 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	ft_strchr_gnl(char *str)
 	return (0);
 }
 
-char	*ft_strjoin(char *s1, char *s2)
+char	*ft_strjoin_gnl(char *s1, char *s2)
 {
 	size_t	i;
 	size_t	j;
