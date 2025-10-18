@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 14:51:53 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/12 04:39:35 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/18 21:31:42 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,4 +82,18 @@ void	move_right(t_info *info)
 		info->player_x = new_x;
 		info->player_y = new_y;
 	}
+}
+
+/**
+ * Optimized pixel drawing function
+ */
+void	put_pixel(t_info *info, int x, int y, int color)
+{
+	char	*dst;
+
+	if (x < 0 || x >= SCREEN_WIDTH || y < 0 || y >= SCREEN_HEIGHT)
+		return ;
+	
+	dst = info->img_data + (y * info->line_length + x * (info->bits_per_pixel / 8));
+	*(unsigned int *)dst = color;
 }

@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 14:51:50 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/12 05:33:58 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/18 21:31:42 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 int	close_window(t_info *info)
 {
-	mlx_destroy_window(info->mlx, info->win);
+	(void)info;
 	safe_exit(0);
 	return (0);
 }

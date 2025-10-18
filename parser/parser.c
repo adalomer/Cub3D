@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 00:39:45 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/14 16:11:06 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/18 21:31:42 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,27 +29,23 @@ t_info	*parse_file(int fd)
 	if (fd < 0)
 	{
 		ft_putstr_fd("Error: Invalid file descriptor\n", 2);
-		return (NULL);
+		safe_exit(1);
 	}
 	info = init_info();
 	if (!info)
 	{
 		ft_putstr_fd("Error: Memory allocation failed\n", 2);
-		return (NULL);
+		safe_exit(1);
 	}
 	if (!parse_identifiers(fd, info))
 	{
 		ft_putstr_fd("Error: Invalid or incomplete identifiers.\n", 2);
-		free(info);
-		return (NULL);
+		safe_exit(1);
 	}
 	if (!parse_map(fd, info))
 	{
-		if (info->map)
-			free_map_data(info->map);
 		ft_putstr_fd("Error: Invalid map.\n", 2);
-		free(info);
-		return (NULL);
+		safe_exit(1);
 	}
 	return (info);
 }
@@ -63,18 +59,15 @@ static int	parse_identifiers(int fd, t_info *info)
 		line = get_next_line(fd);
 		if (!line)
 			break ;
+		gc_add_ptr(line);
 		if (!is_empty_line(line))
 		{
 			if (!process_identifier_line(line, info))
-			{
-				free(line);
-				return (0);
-			}
+				safe_exit(1);
 		}
-		free(line);
 	}
 	if (info->identifiers_found != 6)
-		return (0);
+		safe_exit(1);
 	return (1);
 }
 
@@ -83,7 +76,7 @@ static int	process_map_line(char *line, t_list **map_lines,
 {
 	char	*trimmed;
 
-	trimmed = ft_strtrim(line, " \t\n\r\v\f");
+	trimmed = gc_strtrim(line, " \t\n\r\v\f");
 	if (trimmed && trimmed[0] != '\0')
 	{
 		if (*empty_count > 0 && *map_started)
@@ -97,7 +90,6 @@ static int	process_map_line(char *line, t_list **map_lines,
 	{
 		if (*map_started)
 			(*empty_count)++;
-		free(trimmed);
 		return (0);
 	}
 }
@@ -150,8 +142,8 @@ static int	parse_map(int fd, t_info *info)
 	line = get_next_line(fd);
 	while (line != NULL)
 	{
+		gc_add_ptr(line);
 		process_map_line(line, &map_lines, &map_started, &empty_count);
-		free(line);
 		line = get_next_line(fd);
 	}
 	return (validate_and_convert_map(info, map_lines));

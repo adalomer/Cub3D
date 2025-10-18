@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/12 04:30:00 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/12 04:39:35 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/18 21:31:42 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,21 +18,16 @@ char	**convert_list_to_map(t_list *map_lines, int size)
 	int		i;
 	t_list	*current;
 
-	map = (char **)malloc(sizeof(char *) * (size + 1));
+	map = (char **)gc_malloc(sizeof(char *) * (size + 1));
 	if (!map)
-		return (NULL);
+		safe_exit(1);
 	current = map_lines;
 	i = 0;
 	while (current && i < size)
 	{
-		map[i] = ft_strdup((char *)current->content);
+		map[i] = gc_strdup((char *)current->content);
 		if (!map[i])
-		{
-			while (i > 0)
-				free(map[--i]);
-			free(map);
-			return (NULL);
-		}
+			safe_exit(1);
 		current = current->next;
 		i++;
 	}

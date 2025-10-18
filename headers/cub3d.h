@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 02:14:59 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/12 05:33:58 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/18 21:31:42 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include "get_next_line.h"
 # include "mapchecker.h"
 # include "defines.h"
+# include "gc.h"
 
 typedef struct s_point
 {
@@ -139,7 +140,6 @@ int				is_valid_file(const char *filename);
 int				open_fd(const char *filename);
 void			close_fd(int fd);
 void			cub_main(t_info *info);
-void			safe_exit(int code);
 t_texture_image	load_texture_image(t_info *info, char *path);
 t_texture_image	create_simple_texture(t_info *info, int color);
 int				load_textures(t_info *info);

@@ -6,18 +6,14 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 00:44:10 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/17 19:30:16 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/18 20:03:06 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 1
-# endif
-
-#include <stdlib.h>
+# include <stdlib.h>
+# define BUFFER_SIZE 1
 
 char	*ft_get_slice(char *cake);
 char	*ft_get_leftover(char *cake);

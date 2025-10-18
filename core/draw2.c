@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/12 02:00:00 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/12 05:33:58 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/18 21:31:42 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,18 +34,6 @@ int	get_pixel_from_texture(t_texture_image *texture, int x, int y)
 	else
 		pixel = *addr;
 	return (pixel);
-}
-
-void	put_pixel(t_info *info, int x, int y, int color)
-{
-	char	*dst;
-
-	if (x >= 0 && x < SCREEN_WIDTH && y >= 0 && y < SCREEN_HEIGHT)
-	{
-		dst = info->img_data + (y * info->line_length
-				+ x * (info->bits_per_pixel / 8));
-		*(unsigned int *)dst = color;
-	}
 }
 
 static void	draw_ceiling(t_info *info)

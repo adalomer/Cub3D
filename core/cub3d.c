@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 14:51:56 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/14 16:11:06 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/18 21:31:42 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	cub_main(t_info *info)
 		ft_putstr_fd("Error: mlx_new_window() failed.\n", 2);
 		safe_exit(1);
 	}
+	gc_register_mlx(info->mlx, info->win);
 	if (!load_textures(info))
 		safe_exit(1);
 	setup_hooks(info);

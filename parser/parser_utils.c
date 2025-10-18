@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 14:00:00 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/14 16:11:06 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/18 21:31:42 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,15 +76,13 @@ int	parse_color(const char *color_str)
 	int		g;
 	int		b;
 
-	trimmed = ft_strtrim(color_str, " \t\n\r\v\f");
+	trimmed = gc_strtrim(color_str, " \t\n\r\v\f");
 	if (!trimmed)
-		return (-1);
-	rgb_parts = ft_split(trimmed, ',');
-	free(trimmed);
+		safe_exit(1);
+	rgb_parts = gc_split(trimmed, ',');
 	if (!rgb_parts || !rgb_parts[0] || !rgb_parts[1] || !rgb_parts[2])
-		return (free_split(rgb_parts), -1);
+		safe_exit(1);
 	if (!parse_rgb_values(rgb_parts, &r, &g, &b))
-		return (free_split(rgb_parts), -1);
-	free_split(rgb_parts);
+		safe_exit(1);
 	return ((r << 16) | (g << 8) | b);
 }

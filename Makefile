@@ -13,6 +13,8 @@ SRCS = libs/get_next_line/get_next_line.c \
 	   main.c \
 	   file_utils.c \
 	   core/cub3d.c \
+	   core/gc.c \
+	   core/gc_wrappers.c \
 	   init.c \
 	   core/draw.c \
 	   core/draw2.c \

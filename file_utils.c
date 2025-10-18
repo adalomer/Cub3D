@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/12 05:00:00 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/12 05:33:58 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/18 21:31:42 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,4 @@ void	close_fd(int fd)
 {
 	if (fd >= 0)
 		close(fd);
-}
-
-void	safe_exit(int code)
-{
-	exit(code);
 }

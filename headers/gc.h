@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/07 02:19:55 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/12 05:33:58 by omadali          ###   ########.fr       */
+/*   Created: 2025/10/18 00:00:00 by omadali           #+#    #+#             */
+/*   Updated: 2025/10/18 21:31:42 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,28 +15,36 @@
 
 # include <stdlib.h>
 
-typedef union u_value
-{
-	int		fd;
-	void	*ptr;
-}	t_value;
-
 typedef struct s_gc_node
 {
-	t_value				value;
-	int					type;
+	void				*ptr;
 	struct s_gc_node	*next;
 }	t_gc_node;
 
 typedef struct s_gc
 {
-	t_gc_node	*allocations;
+	t_gc_node	*head;
 }	t_gc;
 
-t_gc	*gc_init(void);
-void	*gc_malloc(t_gc *gc, size_t size);
-char	*gc_strdup(t_gc *gc, const char *s);
-void	gc_free_all(t_gc *gc);
-t_gc	*get_set_gc(t_gc *new_gc);
+// Garbage Collector Functions
+void	*gc_malloc(size_t size);
+void	gc_free_all(void);
+void	gc_add_ptr(void *ptr);
+void	gc_remove_ptr(void *ptr);
+t_gc	*get_gc(void);
+
+// MLX Cleanup Functions
+void	gc_register_mlx(void *mlx, void *win);
+void	gc_register_mlx_img(void *img);
+void	gc_register_mlx_textures(void *north, void *south, void *east, void *west);
+void	gc_cleanup_mlx(void);
+
+// Safe exit function
+void	safe_exit(int code);
+
+// Wrapper functions for common allocations
+char	*gc_strdup(const char *s1);
+char	**gc_split(char const *s, char c);
+char	*gc_strtrim(char const *s1, char const *set);
 
 #endif

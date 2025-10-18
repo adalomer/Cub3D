@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 14:51:11 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/12 05:33:58 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/18 21:31:42 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,9 @@ static void	init_texture_params(t_draw_params params, int *tex_x,
 	if (params.ray->texture && params.ray->texture->ptr)
 	{
 		*tex_x = (int)(params.ray->wall_x * params.ray->texture->width);
-		if (*tex_x < 0)
-			*tex_x = 0;
-		if (*tex_x >= params.ray->texture->width)
-			*tex_x = params.ray->texture->width - 1;
+		*tex_x = (*tex_x < 0) ? 0 : *tex_x;
+		*tex_x = (*tex_x >= params.ray->texture->width) ? 
+				params.ray->texture->width - 1 : *tex_x;
 		*step_y = (double)params.ray->texture->height / wall_height;
 	}
 	else
@@ -50,10 +49,9 @@ static int	get_wall_pixel_color(t_draw_params params, int tex_x, int tex_y)
 
 	if (params.ray->texture && params.ray->texture->ptr)
 	{
-		if (tex_y >= params.ray->texture->height)
-			tex_y = params.ray->texture->height - 1;
-		if (tex_y < 0)
-			tex_y = 0;
+		tex_y = (tex_y >= params.ray->texture->height) ? 
+				params.ray->texture->height - 1 : tex_y;
+		tex_y = (tex_y < 0) ? 0 : tex_y;
 		color = get_pixel_from_texture(params.ray->texture, tex_x, tex_y);
 	}
 	else
@@ -72,17 +70,17 @@ void	draw_textured_line(t_draw_params params)
 	wall_height = params.end - params.start;
 	if (wall_height <= 0)
 		return ;
+	
 	init_texture_params(params, &tex_x, &step_y, wall_height);
 	tex_pos = 0;
 	y = params.start - 1;
+	
 	while (++y <= params.end && y < SCREEN_HEIGHT)
 	{
 		if (y >= 0)
 		{
-			*(unsigned int *)(params.info->img_data + (y
-						* params.info->line_length + params.x
-						* (params.info->bits_per_pixel / 8)))
-				= get_wall_pixel_color(params, tex_x, (int)tex_pos);
+			put_pixel(params.info, params.x, y, 
+				get_wall_pixel_color(params, tex_x, (int)tex_pos));
 		}
 		tex_pos += step_y;
 	}
@@ -95,6 +93,7 @@ void	draw_frame(t_info *info)
 		info->img = mlx_new_image(info->mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
 		info->img_data = mlx_get_data_addr(info->img, &info->bits_per_pixel,
 				&info->line_length, &info->endian);
+		gc_register_mlx_img(info->img);
 	}
 	draw_ceiling_and_floor(info);
 	cast_rays(info);

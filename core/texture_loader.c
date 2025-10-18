@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 14:51:56 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/12 05:33:58 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/18 21:31:42 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,5 +104,14 @@ int	load_textures(t_info *info)
 	load_single_texture(info, info->so, &info->textures.south, 0x45B7D1);
 	load_single_texture(info, info->ea, &info->textures.east, 0xFF6B6B);
 	load_single_texture(info, info->we, &info->textures.west, 0x4ECDC4);
+	
+	// Register textures for cleanup
+	gc_register_mlx_textures(
+		info->textures.north.ptr,
+		info->textures.south.ptr,
+		info->textures.east.ptr,
+		info->textures.west.ptr
+	);
+	
 	return (1);
 }

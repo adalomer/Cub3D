@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 02:29:58 by omadali           #+#    #+#             */
-/*   Updated: 2025/10/12 04:39:35 by omadali          ###   ########.fr       */
+/*   Updated: 2025/10/18 21:31:42 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,9 @@ t_info	*init_info(void)
 {
 	t_info	*info;
 
-	info = malloc(sizeof(t_info));
+	info = gc_malloc(sizeof(t_info));
 	if (!info)
-		return (NULL);
+		safe_exit(1);
 	init_textures(info);
 	init_map_and_player(info);
 	return (info);
