@@ -6,7 +6,7 @@
 #    By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/27 13:45:19 by omadali           #+#    #+#              #
-#    Updated: 2025/10/17 19:30:16 by omadali          ###   ########.fr        #
+#    Updated: 2025/10/18 19:53:52 by omadali          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,19 +37,19 @@ OBJS=$(SRCS:.c=.o)
 
 $(NAME): $(OBJS)
 	@$(AR)  $(NAME) $(OBJS) 
-	@echo "OLMAK" 
+	@echo "Libft Ready !" 
 %.o: %.c
 	@$(CC) $(FLAGS) -c $< -o $@
-
+	
 all: $(NAME)
 
 clean:
 	@rm -f $(OBJS)
-	@echo "TEMİZ"
+	@echo "Clean"
 
 fclean: clean
 	@rm -f $(NAME)
-	@echo "TERTEMİZ"
+	@echo "Full Clean"
 
 re: fclean all
 
